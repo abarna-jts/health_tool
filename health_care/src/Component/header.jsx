@@ -7,7 +7,7 @@ function Header(){
             <section class="navigation">
                 <div class="nav-container">
                     <div class="brand">
-                    <a href="#!">
+                    <a href="/asthuma">
                         <img src={logo} alt="" />
                     </a>
                     </div>

@@ -8,7 +8,7 @@ body{
      font-family: var(--x-font-sans-serif);
 }
  .navigation {
-     height: 55px;
+     height: 87px;
      /* background: linear-gradient(45deg, #4199fe, #74b4fe); */
      background-color: #16192c;
      padding:13px 0px;
@@ -33,6 +33,7 @@ body{
  nav {
      float: right;
 }
+
  nav ul {
      list-style: none;
      margin: 0;
@@ -193,6 +194,7 @@ nav ul li a:hover::before {
   height: auto;
   padding: 20px;
   border-radius: 40px;
+  align-items: center;
   /* box-shadow: 5px 5px 30px 7px rgba(0,0,0,0.25), -5px -5px 30px 7px rgba(0,0,0,0.22); */
   border:2px solid #ccc;
   cursor: pointer;
@@ -211,7 +213,7 @@ nav ul li a:hover::before {
 .card .card_image img {
   width: 150px;
   height:150px;
-  margin-bottom: 55px;
+  /* margin-bottom: 55px; */
   border-radius: 40px;
   object-fit: cover;
 }
@@ -222,7 +224,7 @@ nav ul li a:hover::before {
   font-family: sans-serif;
   font-weight: bold;
   font-size: 18px;
-  margin-top: -80px;
+  /* margin-top: -80px; */
   height: 40px;
 }
 .card_title p{
@@ -251,3 +253,85 @@ nav ul li a:hover::before {
 }
 
 
+
+/* ASTHUMA PAGE STYLE */
+
+.nav-hamburger{
+  float: left;
+  font-size: 34px;
+  color: #958a5f;
+  padding:10px;
+  line-height: 36px;
+  border-bottom:1px dotted #ccc;
+}
+
+.nd-title{
+  padding:10px;
+  font-size: 26px;
+  color: #0d8c60;
+  /* font-family: HNBd; */
+}
+
+.box-class{
+  border: 1px dotted #ccc;
+  padding:15px;
+  margin-bottom: 15px;
+}
+.box-class li{
+
+  text-align: justify;
+}
+.question_section{
+  border: 1px dotted #ccc;
+  padding:15px;
+}
+.question_section2{
+  border: 1px dotted #ccc;
+  padding:15px;
+  margin-top: 15px;
+}
+.question_card{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.emoji-card{
+  width: 230px;
+  margin: 10px 20px;
+  border: 1px dotted #ccc;
+  border-radius: 20px;
+  padding: 0px 13px;
+}
+.emoji-card2{
+  width: 186px;
+  margin: 10px 8px;
+  border: 1px dotted #ccc;
+  border-radius: 20px;
+  padding: 0px 0px;
+}
+.emoji-card2 img{
+  margin: 0px 32px;
+}
+.emoji-card img{
+  margin: 0px 40px;
+}
+.mark-card{
+  text-align: center;
+}
+.question{
+  padding: 10px 0px;
+}
+.question_card button{
+  border: 0;
+  background: transparent;
+}
+.total-box{
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px dotted #ccc;
+    padding:10px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
