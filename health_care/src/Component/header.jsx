@@ -1,68 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from '../assets/img/favicon.png';
+import { Link } from 'react-router-dom';
 
-function Header(){
-    return(
+function Header() {
+    const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    const toggleMobileMenu = () => {
+        setMobileMenuOpen(!isMobileMenuOpen);
+    };
+
+    const handleLinkClick = () => {
+        setMobileMenuOpen(false); 
+    };
+
+    return (
         <>
-            <section class="navigation">
-                <div class="nav-container">
-                    <div class="brand">
-                    <a href="/asthuma">
-                        <img src={logo} alt="" />
-                    </a>
+            <section className="navigation">
+                <div className="nav-container">
+                    <div className="brand">
+                        <Link to="/asthuma">
+                            <img src={logo} alt="logo" />
+                        </Link>
+                    </div>
+                    <div className="nav-text">
+                        <h3>Health Test Tool</h3>
                     </div>
                     <nav>
-                    <div class="nav-mobile"><a id="navbar-toggle" href="#!"><span></span></a></div>
-                    <ul class="nav-list">
-                        <li>
-                        <a href="#!">Home</a>
-                        </li>
-                        <li>
-                        <a href="#!">About</a>
-                        </li>
-                        {/* <li>
-                        <a href="#!">Services</a>
-                        <ul class="navbar-dropdown">
-                            <li>
-                            <a href="#!">Sass</a>
-                            </li>
-                            <li>
-                            <a href="#!">Less</a>
-                            </li>
-                            <li>
-                            <a href="#!">Stylus</a>
-                            </li>
+                        <div className="nav-mobile">
+                            <button id="navbar-toggle" onClick={toggleMobileMenu}>
+                                <span></span>
+                            </button>
+                        </div>
+                        <ul className={`nav-list ${isMobileMenuOpen ? "open" : ""}`}>
+                            <li><Link to="/" onClick={handleLinkClick}>Home</Link></li>
+                            <li><Link to="/" onClick={handleLinkClick}>About</Link></li>
+                            <li><Link to="/Health_tool" onClick={handleLinkClick}>Health Tools</Link></li>
+                            <li><Link to="/" onClick={handleLinkClick}>Health Preparations</Link></li>
+                            <li><Link to="/" onClick={handleLinkClick}>Contact</Link></li>
+                            <li><Link to="/sample" onClick={handleLinkClick}>Sample</Link></li>
                         </ul>
-                        </li> */}
-                        <li>
-                        <a href="#!">Health Tools</a>
-                        </li>
-                        <li>
-                        <a href="#!">Health Preparations</a>
-                        </li>
-                        {/* <li>
-                        <a href="#!">Category</a>
-                        <ul class="navbar-dropdown">
-                            <li>
-                            <a href="#!">Sass</a>
-                            </li>
-                            <li>
-                            <a href="#!">Less</a>
-                            </li>
-                            <li>
-                            <a href="#!">Stylus</a>
-                            </li>
-                        </ul>
-                        </li> */}
-                        <li>
-                        <a href="#!">Contact</a>
-                        </li>
-                    </ul>
                     </nav>
                 </div>
             </section>
         </>
-    )
+    );
 }
 
-export default Header
+export default Header;
