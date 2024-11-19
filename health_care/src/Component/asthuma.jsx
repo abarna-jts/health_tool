@@ -11,8 +11,14 @@ import emoji_1 from '../assets/img/emoji-5.png'
 import rate_emoji_1 from '../assets/img/rate_emoji3.png'
 import rate_emoji_2 from '../assets/img/rate_emoji2.png'
 import rate_emoji_3 from '../assets/img/rate_emoji1.png'
+import Modal from "react-modal";
+import { FaFacebook, FaWhatsapp } from 'react-icons/fa';
+import { SiGmail } from 'react-icons/si';
 
 function Asthuma() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
     const [visibleBox, setVisibleBox] = useState(null);
     const [heading, setHeading] = useState("");
     const [selectedCard, setSelectedCard] = useState(null);
@@ -44,35 +50,35 @@ function Asthuma() {
     };
 
     const allQuestionsAnswered = [score1, score2, score3, score4, score5, score6, score7].every(score => score !== null);
-    const totalScore = calculateTotal();
+    const totalScore_asthuma = calculateTotal();
 
     // Function to determine the color based on score range
     const getScoreColor = () => {
-        if (totalScore >= 20 && totalScore <= 27) return "green";
-        if (totalScore >= 13 && totalScore <= 19) return "#e58c01";
-        if (totalScore >= 0 && totalScore <= 12) return "red";
+        if (totalScore_asthuma >= 20 && totalScore_asthuma <= 27) return "green";
+        if (totalScore_asthuma >= 13 && totalScore_asthuma <= 19) return "#e58c01";
+        if (totalScore_asthuma >= 0 && totalScore_asthuma <= 12) return "red";
         return "black";
     };
 
     // Function to determine the emoji image path based on score range
     const getScoreEmoji = () => {
-        if (totalScore >= 20 && totalScore <= 27) return rate_emoji_1;
-        if (totalScore >= 13 && totalScore <= 19) return rate_emoji_2;
-        if (totalScore >= 0 && totalScore <= 12) return rate_emoji_3;
+        if (totalScore_asthuma >= 20 && totalScore_asthuma <= 27) return rate_emoji_1;
+        if (totalScore_asthuma >= 13 && totalScore_asthuma <= 19) return rate_emoji_2;
+        if (totalScore_asthuma >= 0 && totalScore_asthuma <= 12) return rate_emoji_3;
         return "";
     };
 
     const getStatus = () => {
-        if (totalScore >= 20 && totalScore <= 27) return "Great, Well-controlled.";
-        if (totalScore >= 13 && totalScore <= 19) return "Partly controlled.";
-        if (totalScore >= 0 && totalScore <= 12) return "Poorly controlled.";
+        if (totalScore_asthuma >= 20 && totalScore_asthuma <= 27) return "Great, Well-controlled.";
+        if (totalScore_asthuma >= 13 && totalScore_asthuma <= 19) return "Partly controlled.";
+        if (totalScore_asthuma >= 0 && totalScore_asthuma <= 12) return "Poorly controlled.";
         return "";
     };
 
     const getSuggestion = () => {
-        if (totalScore >= 20 && totalScore <= 27) return "Continue with your current approach for managing your health.";
-        if (totalScore >= 13 && totalScore <= 19) return "Try to see your doctor soon for a review.";
-        if (totalScore >= 0 && totalScore <= 12) return "See your doctor as soon as possible for further evaluation.";
+        if (totalScore_asthuma >= 20 && totalScore_asthuma <= 27) return "Continue with your current approach for managing your health.";
+        if (totalScore_asthuma >= 13 && totalScore_asthuma <= 19) return "Try to see your doctor soon for a review.";
+        if (totalScore_asthuma >= 0 && totalScore_asthuma <= 12) return "See your doctor as soon as possible for further evaluation.";
         return "";
     };
 
@@ -91,40 +97,71 @@ function Asthuma() {
             return score1 + score2 + score3 + score4 + score5;
         };
 
-        const totalScore = calculateTotal();
+        const totalScore_asthuma = calculateTotal();
 
         // Function to determine the color based on score range
         const getScoreColor = () => {
-            if (totalScore >= 20 && totalScore <= 25) return "green";
-            if (totalScore >= 16 && totalScore <= 19) return "#e58c01";
-            if (totalScore >= 0 && totalScore <= 15) return "red";
+            if (totalScore_asthuma >= 20 && totalScore_asthuma <= 25) return "green";
+            if (totalScore_asthuma >= 16 && totalScore_asthuma <= 19) return "#e58c01";
+            if (totalScore_asthuma >= 0 && totalScore_asthuma <= 15) return "red";
             return "black";
         };
 
         // Function to determine the emoji based on score range
         const getScoreEmoji = () => {
-            if (totalScore >= 20 && totalScore <= 25) return rate_emoji_1;
-            if (totalScore >= 16 && totalScore <= 19) return rate_emoji_2;
-            if (totalScore >= 0 && totalScore <= 15) return rate_emoji_3;
+            if (totalScore_asthuma >= 20 && totalScore_asthuma <= 25) return rate_emoji_1;
+            if (totalScore_asthuma >= 16 && totalScore_asthuma <= 19) return rate_emoji_2;
+            if (totalScore_asthuma >= 0 && totalScore_asthuma <= 15) return rate_emoji_3;
             return "";
         };
 
         // Function to determine the status based on score range
         const getStatus = () => {
-            if (totalScore >= 20 && totalScore <= 25) return "Great, Well-controlled.";
-            if (totalScore >= 16 && totalScore <= 19) return "Partly controlled.";
-            if (totalScore >= 0 && totalScore <= 15) return "Poorly controlled.";
+            if (totalScore_asthuma >= 20 && totalScore_asthuma <= 25) return "Great, Well-controlled.";
+            if (totalScore_asthuma >= 16 && totalScore_asthuma <= 19) return "Partly controlled.";
+            if (totalScore_asthuma >= 0 && totalScore_asthuma <= 15) return "Poorly controlled.";
             return "";
         };
 
         // Function to provide suggestions based on the score range
         const getSuggestion = () => {
-            if (totalScore >= 20 && totalScore <= 25) return "Continue with your current approach for managing your health.";
-            if (totalScore >= 16 && totalScore <= 19) return "Try to see your doctor soon for a review.";
-            if (totalScore >= 0 && totalScore <= 15) return "See your doctor as soon as possible for further evaluation.";
+            if (totalScore_asthuma >= 20 && totalScore_asthuma <= 25) return "Continue with your current approach for managing your health.";
+            if (totalScore_asthuma >= 16 && totalScore_asthuma <= 19) return "Try to see your doctor soon for a review.";
+            if (totalScore_asthuma >= 0 && totalScore_asthuma <= 15) return "See your doctor as soon as possible for further evaluation.";
             return "";
         };
     }
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+
+    const sendResultsToEmail = async (e) => {
+        e.preventDefault();
+        if (!email || !name) {
+            alert("Please provide your name and email.");
+            return;
+        }
+        
+        const data = { 
+            email, name, 
+            totalScore_asthuma,
+        };
+    
+        try {
+            const response = await fetch('http://localhost/React%20js/backend-gmail/anxiety-mail.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+    
+            const resultText = await response.text();
+            alert(resultText.trim() === 'success' ? 'Email sent successfully!' : `Error sending email: ${resultText}`);
+            if (isModalOpen) closeModal();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while sending the email.');
+        }
+    };
     return (
         <>
             {/* <div className="container-fluid nav-hamburger">
@@ -591,16 +628,39 @@ function Asthuma() {
                                             </div>
                                         </div>
                                         {allQuestionsAnswered && (
+                                            <>
                                             <div className="row" style={{ justifyContent: "center", color: getScoreColor() }}>
                                                 <div className="col-md-5">
                                                     <div className="total-box">
                                                         <img src={getScoreEmoji()} alt="Rating Emoji" style={{ width: "150px", height: "auto" }} />
-                                                        <h1>{totalScore}</h1>
+                                                        <h1>{totalScore_asthuma}</h1>
                                                         <h5>{getStatus()}</h5>
                                                         <p className="text-center">{getSuggestion()}</p>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div className="social-container" style={{ marginTop: '20px' }}>
+                                            <h5><strong>Share your Score</strong></h5>
+                                                <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
+                                                    <li style={{ margin: '0 10px' }}>
+                                                        <button onClick={openModal}>
+                                                            <SiGmail size={24} />
+                                                        </button>
+                                                    </li>
+                                                    <li style={{ margin: '0 10px' }}>
+                                                        <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                            <FaWhatsapp size={24} />
+                                                        </button>
+                                                    </li>
+                                                    <li style={{ margin: '0 10px' }}>
+                                                        <button href="https://facebook.com/">
+                                                            <FaFacebook size={24} />
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            </>
+                                            
                                         )}
 
 
@@ -911,17 +971,40 @@ function Asthuma() {
                                     </div>
                                 </div>
                                 {score1 !== null && score2 !== null && score3 !== null && score4 !== null && score5 !== null && (
-
+                                    <>
                                     <div className="row" style={{ justifyContent: "center", color: getScoreColor() }}>
                                         <div className="col-md-5">
                                             <div className="total-box">
                                                 <img src={getScoreEmoji()} alt="Rating Emoji" style={{ width: "150px", height: "auto" }} />
-                                                <h1>{totalScore}</h1>
+                                                <h1>{totalScore_asthuma}</h1>
                                                 <h5>{getStatus()}</h5>
                                                 <p className="text-center">{getSuggestion()}</p>
                                             </div>
                                         </div>
                                     </div>
+                                    <div className="social-container" style={{ marginTop: '20px' }}>
+                                    <h5><strong>Share your Score</strong></h5>
+                                        <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button onClick={openModal}>
+                                                    <SiGmail size={24} />
+                                                </button>
+                                            </li>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                    <FaWhatsapp size={24} />
+                                                </button>
+                                            </li>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button href="https://facebook.com/">
+                                                    <FaFacebook size={24} />
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    </>
+
+                                    
                                     )}
 
                             </div>
@@ -935,7 +1018,48 @@ function Asthuma() {
                     )}
                 </div>
             </div>
-
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                contentLabel="Send Results to Email"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "400px",
+                        height: "300px",
+                        margin: "auto",
+                        padding: "20px",
+                    },
+                }}
+            >
+                <h2>Send Your Results to Email</h2>
+                <form onSubmit={sendResultsToEmail}>
+                    <div className="form-group">
+                        <label htmlFor="email">Name</label>
+                        <input
+                            type="name"
+                            id="name"
+                            className="form-control my-2"
+                            placeholder="Enter your name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                        <label htmlFor="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            className="form-control my-2"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-primary mx-3">Send</button>
+                    <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
+                </form>
+            </Modal>
         </>
     )
 }

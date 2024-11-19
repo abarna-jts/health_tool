@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
+import Modal from "react-modal";
+import { FaFacebook, FaWhatsapp } from 'react-icons/fa';
+import { SiGmail } from 'react-icons/si';
 
 function Depression() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+
     const questions = [
         "Little interest or pleasure in doing things",
         "Feeling down, depressed, or hopeless",
@@ -21,7 +28,7 @@ function Depression() {
     ];
 
     const [responses, setResponses] = useState(Array(questions.length).fill(null));
-    const totalScore = responses.reduce((acc, curr) => acc + (curr ?? 0), 0);
+    const totalScore_depression = responses.reduce((acc, curr) => acc + (curr ?? 0), 0);
 
     const handleOptionChange = (questionIndex, value) => {
         const updatedResponses = [...responses];
@@ -39,6 +46,41 @@ function Depression() {
             }
         }
     }, [allQuestionsAnswered]);
+
+
+    const sendResultsToEmail = async (e) => {
+        e.preventDefault();
+        if (!email || !name) {
+            alert("Please provide your name and email.");
+            return;
+        }
+        
+        const data = { 
+            email, name, 
+            totalScore_depression,
+            responses,
+        };
+    
+        try {
+            const response = await fetch('http://localhost/React%20js/backend-gmail/anxiety-mail.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+    
+            const resultText = await response.text();
+            alert(resultText.trim() === 'success' ? 'Email sent successfully!' : `Error sending email: ${resultText}`);
+            if (isModalOpen) closeModal();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while sending the email.');
+        }
+    };
+
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+
 
     return (
         <>
@@ -98,21 +140,44 @@ function Depression() {
                             ))}
                             {/* Display the total box only after all questions are answered */}
                             {allQuestionsAnswered && (
-                                <div id="completion-status" className={`completion-status text-center mt-3 total-box`}>
-                                    <h5 style={{ color: "#16192c" }}>Ready by: {totalScore}</h5>
-                                    <p>
-                                        {totalScore >= 20
-                                            ? "Your results indicate that you may be experiencing symptoms of severe depression. Based on your answers, these symptoms seem to be greatly interfering with your relationships and the tasks of everyday life. Visit your doctor for proper diagnosis."
-                                            : totalScore >= 15
-                                                ? "Your results indicate that you may be experiencing symptoms of moderately severe depression. Based on your answers, living with these symptoms is causing difficulty managing relationships and even the tasks of everyday life. Visit your doctor for proper diagnosis."
-                                                : totalScore >= 10
-                                                    ? "Your results indicate that you may be experiencing some symptoms of moderate depression. While your symptoms are not likely having a major impact on your life, it is important to monitor them. Visit your doctor for proper diagnosis."
-                                                    : totalScore >= 5
-                                                        ? "Your results indicate that you may be experiencing some symptoms of mild depression. While your symptoms are not likely having a major impact on your life, it is important to monitor them. Visit your doctor for proper diagnosis."
-                                                        : "Your results indicate that you have none, or very few symptoms of depression."
-                                        }
-                                    </p>
-                                </div>
+                                <>
+                                    <div id="completion-status" className={`completion-status text-center mt-3 total-box`}>
+                                        <h5 style={{ color: "#16192c" }}>Ready by: {totalScore_depression}</h5>
+                                        <p>
+                                            {totalScore_depression >= 20
+                                                ? "Your results indicate that you may be experiencing symptoms of severe depression. Based on your answers, these symptoms seem to be greatly interfering with your relationships and the tasks of everyday life. Visit your doctor for proper diagnosis."
+                                                : totalScore_depression >= 15
+                                                    ? "Your results indicate that you may be experiencing symptoms of moderately severe depression. Based on your answers, living with these symptoms is causing difficulty managing relationships and even the tasks of everyday life. Visit your doctor for proper diagnosis."
+                                                    : totalScore_depression >= 10
+                                                        ? "Your results indicate that you may be experiencing some symptoms of moderate depression. While your symptoms are not likely having a major impact on your life, it is important to monitor them. Visit your doctor for proper diagnosis."
+                                                        : totalScore_depression >= 5
+                                                            ? "Your results indicate that you may be experiencing some symptoms of mild depression. While your symptoms are not likely having a major impact on your life, it is important to monitor them. Visit your doctor for proper diagnosis."
+                                                            : "Your results indicate that you have none, or very few symptoms of depression."
+                                            }
+                                        </p>
+                                    </div>
+                                    <div className="social-container" style={{ marginTop: '20px' }}>
+                                    <h5><strong>Share your Score</strong></h5>
+                                        <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button onClick={openModal}>
+                                                    <SiGmail size={24} />
+                                                </button>
+                                            </li>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                    <FaWhatsapp size={24} />
+                                                </button>
+                                            </li>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button href="https://facebook.com/">
+                                                    <FaFacebook size={24} />
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </>
+                                
                             )}
                         </div>
                     </div>
@@ -156,6 +221,49 @@ function Depression() {
                     color: #0d8c60;
                 }
             `}</style>
+
+<Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                contentLabel="Send Results to Email"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "400px",
+                        height: "300px",
+                        margin: "auto",
+                        padding: "20px",
+                    },
+                }}
+            >
+                <h2>Send Your Results to Email</h2>
+                <form onSubmit={sendResultsToEmail}>
+                    <div className="form-group">
+                        <label htmlFor="email">Name</label>
+                        <input
+                            type="name"
+                            id="name"
+                            className="form-control my-2"
+                            placeholder="Enter your name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                        <label htmlFor="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            className="form-control my-2"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-primary mx-3">Send</button>
+                    <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
+                </form>
+            </Modal>
         </>
     );
 }
