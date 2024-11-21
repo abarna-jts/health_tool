@@ -3,6 +3,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import female from '../assets/img/female.png'
 import male from '../assets/img/male.png'
 import { useState } from "react";
+import Modal from "react-modal";
+import { SiGmail } from "react-icons/si";
+import { FaWhatsapp, FaFacebook } from "react-icons/fa";
 import GaugeChart from 'react-gauge-chart';
 
 function BMI_Calculation() {
@@ -10,10 +13,13 @@ function BMI_Calculation() {
     const [age, setAge] = useState('');
     const [weight, setWeight] = useState('');
     const [heightCm, setHeightCm] = useState('');
-    const [bmi, setBmi] = useState(null);
+    const [bmi_cal, setBmi] = useState(null);
     const [bmiCategory, setBmiCategory] = useState('');
     const [bmiSuggestion, setBmiSuggestion] = useState('');
     const [selectedCard, setSelectedCard] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
 
     // Define click handler functions for each button
     const handleButton1Click = () => {
@@ -38,14 +44,41 @@ function BMI_Calculation() {
         
         if (name === 'age') setAge(value);
         if (name === 'weight') setWeight(value);
-        if (name === 'heightCm') {
-            if (value && value < 100) {
-                alert("Please enter your height in centimeters, not inches.");
-            }
-            setHeightCm(value);
+        if (name === 'heightCm') setHeightCm(value);
+    };
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+    const sendResultsToEmail = async (e) => {
+        e.preventDefault();
+        if (!email || !name) {
+            alert("Please provide your name and email.");
+            return;
+        }
+        
+        const data = { 
+            email, name, 
+            bmi_cal,
+            age,
+            weight,
+            heightCm,
+        };
+    
+        try {
+            const response = await fetch('https://health-tool.jorim.net/backend-gmail/weight-mail.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+    
+            const resultText = await response.text();
+            alert(resultText.trim() === 'success' ? 'Email sent successfully!' : `Error sending email: ${resultText}`);
+            if (isModalOpen) closeModal();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while sending the email.');
         }
     };
-
+    
     // Calculate BMI and categorize it
     const calculateBMI = (e) => {
         e.preventDefault();
@@ -87,7 +120,7 @@ function BMI_Calculation() {
     };
 
     // Convert BMI to a percentage for a gauge chart (optional)
-    const bmiPercentage = bmi ? (bmi / 40) * 100 : 0;
+    const bmiPercentage = bmi_cal ? (bmi_cal / 40) * 100 : 0;
 
     return (
         <>
@@ -108,16 +141,16 @@ function BMI_Calculation() {
                        
                     </div>
 
-                    <div class="cards-list">
+                    <div className="cards-list">
                     <div 
                             className={`card ${selectedCard === "card1" ? "clicked" : ""}`}
                             onClick={handleButton1Click}
                             style={{ backgroundColor: selectedCard === "card1" ? "rgb(107 173 147 / 30%)" : "transparent" }}
                         >
-                            <div class="card_image">
+                            <div className="card_image">
                                 <img src={male} className="img-fluid" />
                             </div>
-                            <div class="card_title">
+                            <div className="card_title">
                                 <p>Male</p>
                             </div>
                         </div>
@@ -127,10 +160,10 @@ function BMI_Calculation() {
                             onClick={handleButton2Click}
                             style={{ backgroundColor: selectedCard === "card2" ? "rgb(107 173 147 / 30%)" : "transparent" }}
                         >
-                            <div class="card_image">
+                            <div className="card_image">
                                 <img src={female} className="img-fluid" />
                             </div>
-                            <div class="card_title">
+                            <div className="card_title">
                                 <p>Female</p>
                             </div>
                         </div>
@@ -199,7 +232,6 @@ function BMI_Calculation() {
                                                 <div className="col-md-6">
                                                     <div className="col-md-12 gauge_chart">
                                                         {/* Gauge Chart for BMI */}
-
                                                         <div>
                                                             <GaugeChart
                                                                 id="bmi-gauge"
@@ -210,12 +242,35 @@ function BMI_Calculation() {
                                                                 arcPadding={0.02}
                                                             />
                                                         </div>
-                                                        {bmi && (
-                                                            <div>
-                                                            <p className="text-center"><strong>Your BMI:</strong> {bmi}</p>
-                                                            <p className="text-center"><strong>BMI Category:</strong> {bmiCategory}</p>
-                                                            <p className="text-justify"><strong>Suggestion: </strong>{bmiSuggestion}</p>
-                                                            </div>
+                                                        {bmi_cal && (
+                                                            <>
+                                                                <div>
+                                                                    <p className="text-center"><strong>Your BMI:</strong> {bmi_cal}</p>
+                                                                    <p className="text-center"><strong>BMI Category:</strong> {bmiCategory}</p>
+                                                                    <p className="text-justify"><strong>Suggestion: </strong>{bmiSuggestion}</p>
+                                                                </div>
+                                                                
+                                                                <div className="social-container bmi_share_btn" style={{ marginTop: '0px', display: 'flex', justifyContent: 'start', alignItems: 'center' }}>
+                                                                    <h4>Share Your Score</h4>
+                                                                    <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
+                                                                        <li style={{ margin: '0 10px' }}>
+                                                                            <button onClick={openModal}>
+                                                                                <SiGmail size={24} />
+                                                                            </button>
+                                                                        </li>
+                                                                        <li style={{ margin: '0 10px' }}>
+                                                                            <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                                                <FaWhatsapp size={24} />
+                                                                            </button>
+                                                                        </li>
+                                                                        <li style={{ margin: '0 10px' }}>
+                                                                            <button href="https://facebook.com/">
+                                                                                <FaFacebook size={24} />
+                                                                            </button>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </>
                                                         )}
                                                     </div>
                                                 </div>
@@ -304,13 +359,37 @@ function BMI_Calculation() {
                                                                 arcPadding={0.02}
                                                             />
                                                         </div>
-                                                        {bmi && (
-                                                            <div>
-                                                            <p className="text-center"><strong>Your BMI:</strong> {bmi}</p>
-                                                            <p className="text-center"><strong>BMI Category:</strong> {bmiCategory}</p>
-                                                            <p className="text-justify"><strong>Suggestion: </strong>{bmiSuggestion}</p>
+                                                        {bmi_cal && (
+                                                            <>
+                                                                <div>
+                                                                <p className="text-center"><strong>Your BMI:</strong> {bmi_cal}</p>
+                                                                <p className="text-center"><strong>BMI Category:</strong> {bmiCategory}</p>
+                                                                <p className="text-justify"><strong>Suggestion: </strong>{bmiSuggestion}</p>
+                                                                </div>
+                                                                <div className="social-container" style={{ marginTop: '20px' }}>
+                                                                <h5><strong>Share your Score</strong></h5>
+                                                                <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
+                                                                    <li style={{ margin: '0 10px' }}>
+                                                                        <button onClick={openModal}>
+                                                                            <SiGmail size={24} />
+                                                                        </button>
+                                                                    </li>
+                                                                    <li style={{ margin: '0 10px' }}>
+                                                                        <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                                            <FaWhatsapp size={24} />
+                                                                        </button>
+                                                                    </li>
+                                                                    <li style={{ margin: '0 10px' }}>
+                                                                        <button href="https://facebook.com/">
+                                                                            <FaFacebook size={24} />
+                                                                        </button>
+                                                                    </li>
+                                                                </ul>
                                                             </div>
+                                                            </>
+                                                            
                                                         )}
+                                                        
                                                     </div>
                                                 </div>
 
@@ -328,7 +407,51 @@ function BMI_Calculation() {
 
                 </div>
             </section>
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                contentLabel="Send Results to Email"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "400px",
+                        height: "300px",
+                        margin: "auto",
+                        padding: "20px",
+                    },
+                }}
+            >
+                <h2>Send Your Results to Email</h2>
+                <form onSubmit={sendResultsToEmail}>
+                    <div className="form-group">
+                        <label htmlFor="email">Name</label>
+                        <input
+                            type="name"
+                            id="name"
+                            className="form-control my-2"
+                            placeholder="Enter your name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                        <label htmlFor="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            className="form-control my-2"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-primary mx-3">Send</button>
+                    <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
+                </form>
+            </Modal>
         </>
+
+        
     )
 
 }

@@ -1,6 +1,13 @@
 import React, {useState, useEffect} from "react";
+import Modal from "react-modal";
+import { FaFacebook, FaWhatsapp } from 'react-icons/fa';
+import { SiGmail } from 'react-icons/si';
 
 function Nomophobia(){
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+
     const questions = [
         "I feel stressed without constant access to information through my mobile.",
         "I feel overwhelmed if I don't search for information on mobile as often as I want to",
@@ -34,7 +41,7 @@ function Nomophobia(){
     ];
 
     const [responses, setResponses] = useState(Array(questions.length).fill(null));
-    const totalScore = responses.reduce((acc, curr) => acc + (curr ?? 0), 0);
+    const totalScore_nomophobia = responses.reduce((acc, curr) => acc + (curr ?? 0), 0);
 
     const handleOptionChange = (questionIndex, value) => {
         const updatedResponses = [...responses];
@@ -52,6 +59,38 @@ function Nomophobia(){
             }
         }
     }, [allQuestionsAnswered]);
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+
+    const sendResultsToEmail = async (e) => {
+        e.preventDefault();
+        if (!email || !name) {
+            alert("Please provide your name and email.");
+            return;
+        }
+        
+        const data = { 
+            email, name, 
+            totalScore_nomophobia,
+            responses,
+        };
+    
+        try {
+            const response = await fetch('https://health-tool.jorim.net/backend-gmail/anxiety-mail.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+    
+            const resultText = await response.text();
+            alert(resultText.trim() === 'success' ? 'Email sent successfully!' : `Error sending email: ${resultText}`);
+            if (isModalOpen) closeModal();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while sending the email.');
+        }
+    };
 
     return(
         <>
@@ -92,7 +131,7 @@ function Nomophobia(){
                     <div className="row d-flex justify-content-center">
                         <div className="col-md-7">
                             {questions.map((question, questionIndex) => (
-                                <div key={questionIndex} className="question-box p-3 mb-3 anxiety-question">
+                                <div key={questionIndex} className="question-box p-3 mb-3 anxiety-question n_q">
                                     <h5 className="question-title">{questionIndex + 1}. {question}</h5>
                                     <div className="toggle-options">
                                         {options.map((option, optionIndex) => (
@@ -124,9 +163,9 @@ function Nomophobia(){
                             {allQuestionsAnswered && (
                             <>
                                 <div id="completion-status" className={`completion-status text-justify mt-3 total-box`}>
-                                <h5 style={{ color: "#16192c" }}>Total Score: {totalScore}</h5>
+                                <h5 style={{ color: "#16192c" }}>Total Score: {totalScore_nomophobia}</h5>
                                 <ul>
-                                    {totalScore >= 100 && (
+                                    {totalScore_nomophobia >= 100 && (
                                         <>
                                             <h6>Severe ,You have a pathological fear of living without using the mobile phone (see your doctor)</h6>
                                             <p>Your relationship with the mobile phone affects you negatively and is unhealthy, which calls for a visit to the doctor as soon as possible.</p>
@@ -134,7 +173,7 @@ function Nomophobia(){
                                             <p><strong>CAUTION :</strong>This test is not an accurate diagnostic tool, but an indicator of your dependency on mobile.</p>
                                         </>
                                     )}
-                                    {totalScore >= 60 && totalScore < 100 && (
+                                    {totalScore_nomophobia >= 60 && totalScore_nomophobia < 100 && (
                                         <>
                                             <h6>Moderate, The onset of fear of living without the mobile phone (mobile phone addict)</h6>
                                             <p>Your relationship with mobile is unbalanced! Do other activities that do not require the use of mobile phones, such as: walking, practicing hobbies, meditation, communicating with family and friends, going out of the house with less use of mobile phones, and having new experiences.</p>
@@ -142,7 +181,7 @@ function Nomophobia(){
                                             <p><strong>CAUTION :</strong>This test is not an accurate diagnostic tool, but an indicator of your dependency on mobile.</p>
                                         </>
                                     )}
-                                    {totalScore >= 0 && totalScore < 60 && (
+                                    {totalScore_nomophobia >= 0 && totalScore_nomophobia < 60 && (
                                         <>
                                             <h6>Mild, You have a little fear (check your accounts)</h6>
                                             <p>Your relationship with the mobile is starting to lose balance!Pay more attention to the time you spend on mobile phone, and practice other activities that do not require the use of mobile phones such as: walking, practicing hobbies, meditation, communicating with family and friends, going out of the house with less use of mobile phones, and taking on new experiences.</p>
@@ -150,7 +189,7 @@ function Nomophobia(){
                                             <p><strong>CAUTION :</strong>This test is not an accurate diagnostic tool, but an indicator of your dependency on mobile.</p>
                                         </>
                                     )}
-                                    {totalScore === 0 && (
+                                    {totalScore_nomophobia === 0 && (
                                         <>
                                             <p>Your sleep score is very poor and the answers you have given indicate that you're
                                                  experiencing a number of symptoms of insomnia. Episodes of insomnia are common,
@@ -170,7 +209,26 @@ function Nomophobia(){
                                     )}
                                 </ul>
                             </div>
-
+                            <div className="social-container" style={{ marginTop: '20px' }}>
+                                    <h5><strong>Share your Score</strong></h5>
+                                        <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button onClick={openModal}>
+                                                    <SiGmail size={24} />
+                                                </button>
+                                            </li>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                    <FaWhatsapp size={24} />
+                                                </button>
+                                            </li>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button href="https://facebook.com/">
+                                                    <FaFacebook size={24} />
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
                             </>
                         )}
                         </div>
@@ -195,6 +253,49 @@ function Nomophobia(){
                     float: right;
                 }
             `}</style>
+
+<Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                contentLabel="Send Results to Email"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "400px",
+                        height: "300px",
+                        margin: "auto",
+                        padding: "20px",
+                    },
+                }}
+            >
+                <h2>Send Your Results to Email</h2>
+                <form onSubmit={sendResultsToEmail}>
+                    <div className="form-group">
+                        <label htmlFor="email">Name</label>
+                        <input
+                            type="name"
+                            id="name"
+                            className="form-control my-2"
+                            placeholder="Enter your name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                        <label htmlFor="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            className="form-control my-2"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-primary mx-3">Send</button>
+                    <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
+                </form>
+            </Modal>
         </>
     )
 }

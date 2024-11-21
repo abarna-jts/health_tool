@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
+import Modal from "react-modal";
+import { FaFacebook, FaWhatsapp } from 'react-icons/fa';
+import { SiGmail } from 'react-icons/si';
 
 function EatingDisorder() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+
     const questions = [
         "A close family member has, or has had, an eating disorder", // 1
         "I try to hide my eating", // 2
@@ -32,18 +39,18 @@ function EatingDisorder() {
     const options3 = [
         { label: "True", value: 1, emoji: "😊" },
         { label: "False", value: 0, emoji: "😢" },
-        { label: "I don't work out", value: 0.0, emoji: "😢" }
     ];
 
     const [responses, setResponses] = useState(Array(questions.length).fill(null));
-    const totalScore = responses.reduce((acc, curr) => acc + (curr ?? 0), 0);
+    const totalScore_eating = responses.reduce((acc, curr) => acc + (curr ?? 0), 0);
 
     const handleOptionChange = (questionIndex, value) => {
         const updatedResponses = [...responses];
         updatedResponses[questionIndex] = value;
         setResponses(updatedResponses);
     };
-
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
     // Check if all questions have been answered
     const allQuestionsAnswered = responses.every(response => response !== null);
     useEffect(() => {
@@ -64,6 +71,35 @@ function EatingDisorder() {
             return options3;
         } else {
             return options2;
+        }
+    };
+
+    const sendResultsToEmail = async (e) => {
+        e.preventDefault();
+        if (!email || !name) {
+            alert("Please provide your name and email.");
+            return;
+        }
+        
+        const data = { 
+            email, name, 
+            totalScore_eating,
+            responses,
+        };
+    
+        try {
+            const response = await fetch('https://health-tool.jorim.net/backend-gmail/anxiety-mail.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+    
+            const resultText = await response.text();
+            alert(resultText.trim() === 'success' ? 'Email sent successfully!' : `Error sending email: ${resultText}`);
+            if (isModalOpen) closeModal();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while sending the email.');
         }
     };
 
@@ -123,18 +159,41 @@ function EatingDisorder() {
                         ))}
                         {/* Display the total box only after all questions are answered */}
                         {allQuestionsAnswered && (
+                            <>
                             <div id="completion-status" className={`completion-status text-center mt-3 total-box`}>
-                                <h5 style={{ color: "#16192c" }}>Total Score: {totalScore}</h5>
+                                <h5 style={{ color: "#16192c" }}>Total Score: {totalScore_eating}</h5>
                                 <p style={{ marginBottom: "0.5rem" }}><strong>
-                                    {totalScore >= 13 ? "High Risk" : "Minimal Risk"
+                                    {totalScore_eating >= 13 ? "High Risk" : "Minimal Risk"
                                     }</strong></p>
                                 <p>
-                                    {totalScore >= 13
+                                    {totalScore_eating >= 13
                                         ? "Your results indicate that you are at high risk of having an eating disorder, we suggest you speak with a doctor."
                                         : "Your results indicate that you are at low risk of having an eating disorder. If you notice that your symptoms aren't improving, you may want to bring them up with a doctor."
                                     }
                                 </p>
                             </div>
+                            <div className="social-container" style={{ marginTop: '20px' }}>
+                            <h5><strong>Share your Score</strong></h5>
+                                <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
+                                    <li style={{ margin: '0 10px' }}>
+                                        <button onClick={openModal}>
+                                            <SiGmail size={24} />
+                                        </button>
+                                    </li>
+                                    <li style={{ margin: '0 10px' }}>
+                                        <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                            <FaWhatsapp size={24} />
+                                        </button>
+                                    </li>
+                                    <li style={{ margin: '0 10px' }}>
+                                        <button href="https://facebook.com/">
+                                            <FaFacebook size={24} />
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                            </>
+                            
                         )}
                     </div>
                 </div >
@@ -178,6 +237,49 @@ function EatingDisorder() {
                     color: #0d8c60;
                 }
             `}</style>
+            {/* Modal for the Gmail form */}
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                contentLabel="Send Results to Email"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "400px",
+                        height: "300px",
+                        margin: "auto",
+                        padding: "20px",
+                    },
+                }}
+            >
+                <h2>Send Your Results to Email</h2>
+                <form onSubmit={sendResultsToEmail}>
+                    <div className="form-group">
+                        <label htmlFor="email">Name</label>
+                        <input
+                            type="name"
+                            id="name"
+                            className="form-control my-2"
+                            placeholder="Enter your name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                        <label htmlFor="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            className="form-control my-2"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-primary mx-3">Send</button>
+                    <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
+                </form>
+            </Modal>
         </>
     );
 }

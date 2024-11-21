@@ -1,5 +1,5 @@
  @import url('https://fonts.googleapis.com/css?family=Roboto');
-
+ @import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css);
  :root {
    --x-font-sans-serif: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Liberation Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
  }
@@ -323,7 +323,7 @@
    border: 1px dotted #ccc;
    padding: 15px;
    margin-bottom: 15px;
-   background-color: transparent !important;
+   background-color: #f5f6f6 !important;
  }
 
  .box-class li {
@@ -645,30 +645,169 @@
    display: none;
  }
 
+
+ /* social icon styles */
+
+ .social-container {
+  width: 400px;
+  margin: 0vh auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  }
+  
+  .social-icons {
+  padding: 0;
+  list-style: none;
+  /* margin: 1em; */
+  }
+  .social-container h5{
+    color: #144289;
+  }
+  .social-icons li {
+  display: inline-block;
+  margin: 0.15em;
+  position: relative;
+  font-size: 1.2em;
+  }
+  
+  .social-icons i {
+  color: #fff;
+  position: absolute;
+  top: 21px;
+  left: 21px;
+  transition: all 265ms ease-out;
+  }
+  
+  .social-icons button {
+  display: inline-block;
+  border: none;
+  display: flex;
+  background: transparent;
+  }
+  .social-icons button svg{
+    position: absolute;
+    top: 13px;
+    left: 19px;
+    color: #fff;
+  }
+  .social-icons button:hover svg{
+    color: #173c76;
+    /* font-size: 33px; */
+    height: 30px;
+    width: 30px;
+    top:10px;
+    left:14px;
+  }
+  
+  .social-icons button:before {
+  transform: scale(1);
+  -ms-transform: scale(1);
+  -webkit-transform: scale(1);
+  content: " ";
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  display: block;
+  background: linear-gradient(45deg, #1f2436, #0e50b0);
+  transition: all 265ms ease-out;
+  }
+  
+  .social-icons button:hover:before {
+  transform: scale(0);
+  transition: all 265ms ease-in;
+  }
+  
+  .social-icons button:hover button {
+  transform: scale(2.2);
+  -ms-transform: scale(2.2);
+  -webkit-transform: scale(2.2);
+  color: #ff003c;
+  background: -webkit-linear-gradient(45deg, #ff003c, #c648c8);
+  --webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 265ms ease-in;
+  }
+  
+  .social-icons button.social-square:before {
+  background: linear-gradient(45deg, #7b00e0, #ae31d9);
+  border-radius: 10%;
+  }
+  
+  .social-icons button.social-square:hover:before {
+  transform: rotate(-180deg);
+  -ms-transform: rotate(-180deg);
+  -webkit-transform: scale(-180deg);
+  border-radius: 100%;
+  }
+  
+  .social-icons button.social-square:hover i {
+  transform: scale(1.6);
+  -ms-transform: scale(1.6);
+  -webkit-transform: scale(1.6);
+  color: #fff;
+  transform: scale(1.6);
+  -webkit-text-fill-color: #fff;
+  }
+  .bmi_share_btn{
+    margin-left: -65%;
+  }
+ /* social icon styles end */
+
+ /* Modal class Style Start */
+.ReactModal__Overlay{
+  background-color: rgb(255 255 255 / 25%) !important;
+}
+.ReactModal__Content{
+  position: absolute;
+    inset: 40px;
+    border: 1px dotted #ccc !important;
+    background: rgb(255, 255, 255);
+    overflow: auto;
+    border-radius: 20px !important;
+    outline: none;
+    padding: 20px;
+    width: 400px;
+    height: 300px;
+    margin: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.ReactModal__Content h2 {
+  font-size: 1.5rem;
+  color: #0d8c60;
+  text-align: center;
+}
+.ReactModal__Content .form-group button{
+  margin: 10px;
+}
+  /* Modal class Style End */
+
  /* 1399px response */
  @media(max-width:1399px) and (min-width:1200px) {
    .sidebar {
      width: 213px !important;
-     padding: 25px 8px !important;
-     height: 400px !important;
-     position: absolute !important;
-     top: 14% !important;
+     padding: 78px 8px 0px 8px !important;
+     height: 100% !important;
+     position: fixed !important;
+     top: auto !important;
      border-radius: 10px;
-     margin-left: 10px;
+     margin-left: 0px;
    }
+   
 
    .sidebar-links li a {
      gap: 0 8px;
-     padding: 5px !important;
-     font-size: 14px !important;
+     padding: 3px !important;
+     font-size: 13px !important;
    }
 
    .sidebar-links {
-     margin-top: 10px !important;
+     margin-top: 0px !important;
    }
 
    .sidebar-links h4 span {
      font-size: 1.2rem;
+     display: none;
    }
 
    .emoji-card {
@@ -713,6 +852,17 @@
      height: 22px;
      font-size: 13px;
    }
+   .calories {
+    width: 135px !important;
+    height: auto;
+    margin: 10px;
+}
+.result-text h6{
+  font-size: 0.8rem;
+}
+.result-text {
+  padding: 0px;
+}
  }
 
  /* Styles for active links */
@@ -785,7 +935,11 @@
 
    .card .card_title {
      font-size: 15px;
-     height: 45px;
+     height: auto;
+   }
+
+   .card .card_title p{
+    margin-bottom: 0rem;
    }
 
    .col-md-7 {
@@ -824,7 +978,7 @@
    }
 
    .first_section {
-     margin-left: 33px;
+     margin-left: 0px;
    }
 
    .emoji-card img {
@@ -835,22 +989,30 @@
    .emoji-card {
      margin: 3px;
      width: 80px;
-     padding: 0px 14px;
+     padding: 0px 9px;
    }
 
    .emoji-card2 img {
      margin: 0px;
-     width: 30px;
+     width: 23px;
    }
 
    .emoji-card2 {
      margin: 3px;
-     width: 80px;
-     padding: 0px 5px;
-   }
-
-   .emoji-card2 button {
      width: 40px;
+     padding: 0px 0px;
+   }
+   .social-container {
+    width: 100%;
+   }
+   .bmi_share_btn {
+    margin-left: 0%;
+    }
+    .first-question h5{
+      font-size: 15px !important;
+    }
+   .emoji-card2 button {
+     width: 38px;
    }
 
    .mark-card p {
@@ -872,9 +1034,39 @@
    }
 
    label {
-     font-size: 15px;
+     font-size: 13px;
    }
-
+   .radio-label {
+    font-size: 14px !important;
+   }
+   .emoji{
+    font-size: 12px !important;
+   }
+   .question-title {
+    font-size: 15px !important;
+   }
+   .selected-value-box {
+      top: -71px !important;
+      margin-top: 0px !important;
+   }
+   .aq .selected-value-box {
+      top: -100px !important;
+   }
+   .d_q .selected-value-box {
+    top: -60px !important;
+  }
+  .n_q .selected-value-box{
+   
+      top: -58px !important;
+  }
+   .ReactModal__Content{
+    width: 342px !important;
+    height: 291px !important;
+    margin: auto 10px !important;
+   }
+   .completion-status{
+    width: 100%;
+   }
    .calories {
      width: 127px !important;
      height: auto;
@@ -1196,3 +1388,30 @@
      display: none;
    }
  }
+ .banner-section {
+  position: relative; /* Required for pseudo-element positioning */
+  padding: 40px 0px;
+  background-image: url('assets/img/contact-bg.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover; /* Ensure the image covers the entire section */
+  overflow: hidden; /* To ensure the pseudo-element stays within the section */
+}
+
+.banner-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(22 25 44 / 73%); /* Blue with 50% opacity */
+  z-index: 1; /* Ensures the overlay is above the image */
+}
+
+.banner-section .contact_img{
+  width: 300px;
+  height: auto;
+}
+
+ 

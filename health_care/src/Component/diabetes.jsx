@@ -1,6 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Modal from "react-modal";
+import { FaFacebook, FaWhatsapp } from 'react-icons/fa';
+import { SiGmail } from 'react-icons/si';
+
 
 function Diabetes() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
     const questions = [
         {
             id: 1,
@@ -26,7 +33,6 @@ function Diabetes() {
             options: [
                 { label: "Yes (1 point)", value: 1, emoji: "😊" },
                 { label: "No (0 points)", value: 0, emoji: "😢" },
-                { label: "Not Applicable", value: 0, emoji: "😢" }
             ]
         },
         {
@@ -178,7 +184,7 @@ function Diabetes() {
         // Add mappings for other heights similarly
     };
 
-    const [responses, setResponses] = useState({});
+    const [responses, setResponses] = useState(Array(questions.length).fill(null));
     const [height, setHeight] = useState("");
     const [weight, setWeight] = useState("");
     const [heightWeightPointsTotal, setHeightWeightPointsTotal] = useState(0);
@@ -206,6 +212,7 @@ function Diabetes() {
         setResponses({
             ...responses,
             [questionId]: value
+            
         });
     };
 
@@ -213,6 +220,59 @@ function Diabetes() {
         const questionPointsTotal = Object.values(responses).reduce((acc, val) => acc + val, 0);
         return questionPointsTotal + heightWeightPointsTotal;
     };
+
+
+    const sendResultsToEmail = async (e) => {
+        e.preventDefault();
+    
+        // Validate if name and email are provided
+        if (!email || !name) {
+            alert("Please provide your name and email.");
+            return;
+        }
+    
+        // Calculate the total score
+        const totalScore_diabetes = calculateTotalPoints();
+    
+        // Prepare the data to send in the email
+        const data = {
+            email, 
+            name, 
+            totalScore_diabetes,
+            responses,
+            height,  // Add height value
+            weight,  // Add weight value
+        };
+    
+        try {
+            const response = await fetch('https://health-tool.jorim.net/backend-gmail/anxiety-mail.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+    
+            const resultText = await response.text();
+            alert(resultText.trim() === 'success' ? 'Email sent successfully!' : `Error sending email: ${resultText}`);
+            
+            // Close modal if it was opened
+            if (isModalOpen) closeModal();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while sending the email.');
+        }
+    };
+    
+    useEffect(() => {
+        if (calculateTotalPoints) {
+            const completionElement = document.getElementById("completion-status");
+            if (completionElement) {
+                completionElement.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+    }, [calculateTotalPoints]);
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
 
     return (
         <>
@@ -276,7 +336,10 @@ function Diabetes() {
                                                         ))}
                                                     </select>
                                                 </div>
-                                                <p>Points for Height & Weight: {heightWeightPointsTotal}</p>
+                                                <p style={{ color: heightWeightPointsTotal > 0 ? 'green' : 'black' }}>
+                                                    Points for Height & Weight: {heightWeightPointsTotal}
+                                                    </p>
+                                                
                                             </>
                                         ) : (
                                             question.options.map((option, optionIndex) => (
@@ -296,14 +359,21 @@ function Diabetes() {
                                                         onChange={() => handleOptionChange(questionIndex, option.value)}
                                                         checked={responses[questionIndex] === option.value}
                                                     />
-                                                    </label>
+                                                </label>
                                                 </div>
                                             ))
                                         )}
                                     </div>
+                                    {responses[questionIndex] !==null && (
+                                        <div className="selected-value-box">
+                                            {responses[questionIndex]}
+                                            
+                                        </div>
+                                    )}
                                 </div>
+
                             ))}
-                            <div className={`completion-status text-justify mt-3 total-box mb-3`}>
+                            <div id="completion-status" className={`completion-status text-justify mt-3 total-box mb-3`}>
                                 <h5 style={{ color: "#16192c" }}>Total Points: {calculateTotalPoints()}</h5>
                                 {calculateTotalPoints() >= 5 && (
                                     <>
@@ -325,6 +395,26 @@ function Diabetes() {
                                         <p>Answer all the question</p>
                                     </>
                                 )}
+                                <div className="social-container" style={{ marginTop: '20px' }}>
+                                    <h5><strong>Share your Score</strong></h5>
+                                        <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button onClick={openModal}>
+                                                    <SiGmail size={24} />
+                                                </button>
+                                            </li>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                    <FaWhatsapp size={24} />
+                                                </button>
+                                            </li>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button href="https://facebook.com/">
+                                                    <FaFacebook size={24} />
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
                             </div>
                         </div>
                     </div>
@@ -364,6 +454,49 @@ function Diabetes() {
 
                 
             `}</style>
+
+<Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                contentLabel="Send Results to Email"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "400px",
+                        height: "300px",
+                        margin: "auto",
+                        padding: "20px",
+                    },
+                }}
+            >
+                <h2>Send Your Results to Email</h2>
+                <form onSubmit={sendResultsToEmail}>
+                    <div className="form-group">
+                        <label htmlFor="email">Name</label>
+                        <input
+                            type="name"
+                            id="name"
+                            className="form-control my-2"
+                            placeholder="Enter your name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                        <label htmlFor="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            className="form-control my-2"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-primary mx-3">Send</button>
+                    <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
+                </form>
+            </Modal>
         </>
     );
 }

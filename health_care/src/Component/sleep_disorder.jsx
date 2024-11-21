@@ -1,6 +1,12 @@
 import React, {useState, useEffect} from "react";
+import Modal from "react-modal";
+import { FaFacebook, FaWhatsapp } from 'react-icons/fa';
+import { SiGmail } from 'react-icons/si';
 
 function SleepDisorder(){
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
     const questions = [
         "Thinking about a typical night in the last month, how long does it take you to fall asleep?", // 1
         "Thinking about a typical night in the last month, if you wake up, how long are you awake for in total?", // 2
@@ -54,7 +60,7 @@ function SleepDisorder(){
     ];
 
     const [responses, setResponses] = useState(Array(questions.length).fill(null));
-    const totalScore = responses.reduce((acc, curr) => acc + (curr ?? 0), 0);
+    const totalScore_sleep = responses.reduce((acc, curr) => acc + (curr ?? 0), 0);
 
     const handleOptionChange = (questionIndex, value) => {
         const updatedResponses = [...responses];
@@ -93,6 +99,40 @@ function SleepDisorder(){
             return options2;
         }
     };
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+
+    const sendResultsToEmail = async (e) => {
+        e.preventDefault();
+        if (!email || !name) {
+            alert("Please provide your name and email.");
+            return;
+        }
+        
+        const data = { 
+            email, name, 
+            totalScore_sleep,
+            responses,
+        };
+    
+        try {
+            const response = await fetch('https://health-tool.jorim.net/backend-gmail/anxiety-mail.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+    
+            const resultText = await response.text();
+            alert(resultText.trim() === 'success' ? 'Email sent successfully!' : `Error sending email: ${resultText}`);
+            if (isModalOpen) closeModal();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while sending the email.');
+        }
+    };
+
+
     return(
         <>
             <section className="pt-3 pb-3">
@@ -167,9 +207,9 @@ function SleepDisorder(){
                         {allQuestionsAnswered && (
                             <>
                                 <div id="completion-status" className={`completion-status text-justify mt-3 total-box`}>
-                                <h5 style={{ color: "#16192c" }}>Total Score: {totalScore}</h5>
+                                <h5 style={{ color: "#16192c" }}>Total Score: {totalScore_sleep}</h5>
                                 <ul>
-                                    {totalScore >= 25 && (
+                                    {totalScore_sleep >= 25 && (
                                         <>
                                             <p>Your sleep score is excellent and indicates that you're not struggling with insomnia 
                                                 at the moment. Episodes of insomnia are common, in fact, it's estimated that many of
@@ -188,7 +228,7 @@ function SleepDisorder(){
                                                  </ul>
                                         </>
                                     )}
-                                    {totalScore >= 9 && totalScore < 25 && (
+                                    {totalScore_sleep >= 9 && totalScore_sleep < 25 && (
                                         <>
                                             <p>Your sleep score is OK but some of the answers you have given indicate that 
                                                 you're experiencing a few symptoms of insomnia. Episodes of insomnia are common,
@@ -206,7 +246,7 @@ function SleepDisorder(){
                                                  </ul>
                                         </>
                                     )}
-                                    {totalScore >= 1 && totalScore < 9 && (
+                                    {totalScore_sleep >= 1 && totalScore_sleep < 9 && (
                                         <>
                                             <p>Your sleep score is excellent and indicates that you're not struggling with 
                                                 insomnia at the moment. Episodes of insomnia are common, in fact, it's estimated 
@@ -226,7 +266,7 @@ function SleepDisorder(){
                                            
                                         </>
                                     )}
-                                    {totalScore === 0 && (
+                                    {totalScore_sleep === 0 && (
                                         <>
                                             <p>Your sleep score is very poor and the answers you have given indicate that you're
                                                  experiencing a number of symptoms of insomnia. Episodes of insomnia are common,
@@ -246,7 +286,26 @@ function SleepDisorder(){
                                     )}
                                 </ul>
                             </div>
-
+                            <div className="social-container" style={{ marginTop: '20px' }}>
+                                    <h5><strong>Share your Score</strong></h5>
+                                        <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button onClick={openModal}>
+                                                    <SiGmail size={24} />
+                                                </button>
+                                            </li>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                    <FaWhatsapp size={24} />
+                                                </button>
+                                            </li>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button href="https://facebook.com/">
+                                                    <FaFacebook size={24} />
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
                             </>
                         )}
                     </div>
@@ -291,6 +350,49 @@ function SleepDisorder(){
                     color: #0d8c60;
                 }
             `}</style>
+
+<Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                contentLabel="Send Results to Email"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "400px",
+                        height: "300px",
+                        margin: "auto",
+                        padding: "20px",
+                    },
+                }}
+            >
+                <h2>Send Your Results to Email</h2>
+                <form onSubmit={sendResultsToEmail}>
+                    <div className="form-group">
+                        <label htmlFor="email">Name</label>
+                        <input
+                            type="name"
+                            id="name"
+                            className="form-control my-2"
+                            placeholder="Enter your name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                        <label htmlFor="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            className="form-control my-2"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-primary mx-3">Send</button>
+                    <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
+                </form>
+            </Modal>
         </>
     );
 }

@@ -20,6 +20,7 @@ import About_us from './Component/about_us';
 import Contact_us from './Component/contact_us';
 import Sidebar from './Component/sidebar';
 import Sample from './Component/sample';
+import Asthuma_test from './Component/asthuma_test';
 // import Carousel_nav from './Component/carousel';
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Health_tool />} />
           <Route path="/asthuma" element={<Asthuma />} />
+          {/* <Route path="/asthuma_test" element={<Asthuma_test />} /> */}
           <Route path="/pregnancy" element={<Pregnancy />} />
           <Route path="/bmi_calculation" element={<BMI_Calculation />} />
           <Route path="/calories_calculation" element={<Calories />} />

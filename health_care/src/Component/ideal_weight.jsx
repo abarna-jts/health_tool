@@ -1,10 +1,54 @@
 import React, { useState } from "react";
-import GaugeChart from "react-gauge-chart"; // Ensure this is installed via npm or yarn
+import Modal from "react-modal";
+import { SiGmail } from "react-icons/si";
+import { FaWhatsapp, FaFacebook } from "react-icons/fa";
 
 function IdealBodyWeight() {
     const [height, setHeight] = useState('');
     const [ibw, setIbw] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false); // State to control the modal visibility
+    const [email, setEmail] = useState('');
+    const [name, setName] = useState(''); // Email state for the form input
 
+    // Function to handle opening the modal
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    // Function to handle closing the modal
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    // Function to handle the email sending logic
+    const sendResultsToEmail = async (e) => {
+        e.preventDefault();
+        if (!email || !name) {
+            alert("Please provide your name and email.");
+            return;
+        }
+        
+        const data = { 
+            email, name, 
+            height,
+            ibw,
+        };
+    
+        try {
+            const response = await fetch('https://health-tool.jorim.net/backend-gmail/weight-mail.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+    
+            const resultText = await response.text();
+            alert(resultText.trim() === 'success' ? 'Email sent successfully!' : `Error sending email: ${resultText}`);
+            if (isModalOpen) closeModal();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while sending the email.');
+        }
+    };
     const calculateIBW = (e) => {
         e.preventDefault();
 
@@ -53,6 +97,7 @@ function IdealBodyWeight() {
                                                 className="form-control"
                                                 placeholder="Enter your height in cm"
                                                 value={height}
+                                                name="height"
                                                 onChange={(e) => setHeight(e.target.value)}
                                                 required
                                             />
@@ -65,13 +110,76 @@ function IdealBodyWeight() {
                             {ibw && (
                                 <div className="result mt-4 text-center">
                                     <h4>Your Ideal Body Weight: {ibw} kg</h4>
-                                    <button type="submit" className="btn btn-primary">Share Your Score</button>
+                                    <div className="social-container" style={{ marginTop: '20px' }}>
+                                    <h5><strong>Share your Score</strong></h5>
+                                        <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button onClick={openModal}>
+                                                    <SiGmail size={24} />
+                                                </button>
+                                            </li>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                    <FaWhatsapp size={24} />
+                                                </button>
+                                            </li>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button href="https://facebook.com/">
+                                                    <FaFacebook size={24} />
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             )}
                         </div>
                     </div>
                 </div>
             </section>
+
+            {/* Modal for the Gmail form */}
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                contentLabel="Send Results to Email"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "400px",
+                        height: "300px",
+                        margin: "auto",
+                        padding: "20px",
+                    },
+                }}
+            >
+                <h2>Send Your Results to Email</h2>
+                <form onSubmit={sendResultsToEmail}>
+                    <div className="form-group">
+                        <label htmlFor="email">Name</label>
+                        <input
+                            type="name"
+                            id="name"
+                            className="form-control my-2"
+                            placeholder="Enter your name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                        <label htmlFor="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            className="form-control my-2"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-primary mx-3">Send</button>
+                    <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
+                </form>
+            </Modal>
         </>
     );
 }

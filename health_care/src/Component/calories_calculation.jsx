@@ -1,4 +1,4 @@
-import { useState , useRef } from 'react';
+import { useState, useEffect} from 'react';
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import weight_icon from '../assets/img/weight_icon.png';
@@ -6,6 +6,9 @@ import calories_icon from '../assets/img/calories-icon.png';
 import ideal_weight from '../assets/img/ideal_weight.png';
 import suggested_calories from '../assets/img/suggested_calories.png';
 import reduce_cal from '../assets/img/reduce_cal.png';
+import Modal from "react-modal";
+import { FaFacebook, FaWhatsapp } from 'react-icons/fa';
+import { SiGmail } from 'react-icons/si';
 
 const CalorieCalculator = () => {
     const [weight, setWeight] = useState('');
@@ -19,7 +22,9 @@ const CalorieCalculator = () => {
     const [idealWeight, setIdealWeight] = useState(null);
     const [caloriesForIdealWeight, setCaloriesForIdealWeight] = useState(null);
     const [caloriesAdjustment, setCaloriesAdjustment] = useState('');
-    const totalScoreRef = useRef(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -46,7 +51,7 @@ const CalorieCalculator = () => {
             alert("Please enter valid values for all fields.");
             return;
         }
-        totalScoreRef.current.scrollIntoView({ behavior: 'smooth' });
+        
         const heightInMeters = heightNum / 100; // Convert height from cm to meters
 
         // Calculate BMI
@@ -107,7 +112,57 @@ const CalorieCalculator = () => {
         } else {
             setCaloriesAdjustment("You are already at your ideal calorie intake.");
         }
+        
     };
+
+    const sendResultsToEmail = async (e) => {
+        e.preventDefault();
+        if (!email || !name) {
+            alert("Please provide your name and email.");
+            return;
+        }
+        
+        const data = { 
+            email, name, 
+            bmi, calories, 
+            caloriesForIdealWeight, 
+            idealWeight, 
+            caloriesAdjustment,
+            weight,
+            heightCm,
+            age,
+            gender,
+            activityLevel,
+        };
+    
+        try {
+            const response = await fetch('https://health-tool.jorim.net/backend-gmail/weight-mail.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+    
+            const resultText = await response.text();
+            alert(resultText.trim() === 'success' ? 'Email sent successfully!' : `Error sending email: ${resultText}`);
+            if (isModalOpen) closeModal();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while sending the email.');
+        }
+    };
+    
+    useEffect(() => {
+        if (bmi) {
+            const completionElement = document.getElementById("completion-status");
+            if (completionElement) {
+                completionElement.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+    }, [bmi]);
+
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
 
     return (
         <>
@@ -222,7 +277,30 @@ const CalorieCalculator = () => {
                                     <button type="submit" className="btn btn-primary">Calculate BMI & Calories</button>
                                     <div className="result">
                                     {calories &&
-                                        <h5 className="text-center pt-2 pb-2" style={{color:"#0d8c60"}}><strong>Result: You consume at a rate {calories} calories a day</strong></h5>
+                                    <>
+                                    <h5 className="text-center pt-2 pb-2" style={{color:"#0d8c60"}}><strong>Result: You consume at a rate {calories} calories a day</strong></h5>
+                                        <div className="social-container" style={{ marginTop: '20px' }}>
+                                                <h5><strong>Share your Score</strong></h5>
+                                                <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
+                                                    <li style={{ margin: '0 10px' }}>
+                                                        <button onClick={openModal}>
+                                                            <SiGmail size={24} />
+                                                        </button>
+                                                    </li>
+                                                    <li style={{ margin: '0 10px' }}>
+                                                        <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!" target="_blank" rel="noopener noreferrer">
+                                                            <FaWhatsapp size={24} />
+                                                        </button>
+                                                    </li>
+                                                    <li style={{ margin: '0 10px' }}>
+                                                        <button href="https://facebook.com/" target="_blank" rel="noopener noreferrer">
+                                                            <FaFacebook size={24} />
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                    </>
+                                        
                                     }
                                     </div>
 
@@ -230,10 +308,10 @@ const CalorieCalculator = () => {
                             </div>
 
                         </div>
-                        <div ref={totalScoreRef} className="row d-flex pt-3 justify-content-center">
+                        <div className="row d-flex pt-3 justify-content-center">
                             {bmi &&
                                 <>
-                                    <div className="total-box calories">
+                                    <div className="total-box calories " id='completion-status'>
                                         <img src={weight_icon} alt="" className='icon'/>
                                         <div className="result-text">
                                             <h6>BMI:{bmi}</h6>
@@ -304,6 +382,47 @@ const CalorieCalculator = () => {
 
                 </div>
             </section>
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                contentLabel="Send Results to Email"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "400px",
+                        height: "300px",
+                        margin: "auto",
+                        padding: "20px",
+                    },
+                }}
+            >
+                <h2>Send Your Results to Email</h2>
+                <form onSubmit={sendResultsToEmail}>
+                    <div className="form-group">
+                        <label htmlFor="email">Name</label>
+                        <input
+                            type="name"
+                            id="name"
+                            className="form-control my-2"
+                            placeholder="Enter your name"
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                        <label htmlFor="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            className="form-control my-2"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-primary mx-3">Send</button>
+                    <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
+                </form>
+            </Modal>
 
         </>
 

@@ -10,22 +10,81 @@ import v_8 from '../assets/img/v-8.png';
 import v_9 from '../assets/img/v-9.png';
 import v_10 from '../assets/img/v-10.png';
 import v_11 from '../assets/img/v-11.png';
+import Modal from "react-modal";
+import { FaFacebook, FaWhatsapp } from 'react-icons/fa';
+import { SiGmail } from 'react-icons/si';
+
 
 function VisualTest() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
     // Set initial state for the visual acuity value and message
     const [visualAcuity, setVisualAcuity] = useState('6/60');
     const [message, setMessage] = useState('Visit the doctor for a more accurate test');
     const [activeButton, setActiveButton] = useState(null);  // To track the active button
+    const [selectedImage, setSelectedImage] = useState(null);
     const totalScoreRef = useRef(null);
 
     // Function to update the visual acuity value and message, and set active button background color
-    const handleButtonClick = (value, msg, buttonIndex) => {
+    const handleButtonClick = (value, msg, buttonIndex, imgSrc) => {
         setVisualAcuity(value);
         setMessage(msg);  // Set the message dynamically based on the button clicked
         setActiveButton(buttonIndex); // Set the clicked button index as active
-        // Scroll to the total score section
+        setSelectedImage(imgSrc);
+        sendImageToBackend(imgSrc);
         totalScoreRef.current.scrollIntoView({ behavior: 'smooth' });
     };
+    const sendImageToBackend = async (imgSrc) => {
+        try {
+            const formData = new FormData();
+            formData.append('selectedImage', imgSrc);  // Send the image path or data
+    
+            const response = await fetch('http://localhost/React%20js/backend-gmail/anxiety-mail.php', {
+                method: 'POST',
+                body: formData,
+            });
+    
+            if (response.ok) {
+                console.log("Image sent successfully");
+            } else {
+                console.error("Error sending image");
+            }
+        } catch (error) {
+            console.error("Error in sending image to backend:", error);
+        }
+    };
+    const sendResultsToEmail = async (e) => {
+        e.preventDefault();
+        if (!email || !name) {
+            alert("Please provide your name and email.");
+            return;
+        }
+        
+        const data = { 
+            email, name, 
+            visualAcuity,
+            selectedImage,
+        };
+    
+        try {
+            const response = await fetch('https://health-tool.jorim.net/backend-gmail/anxiety-mail.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+    
+            const resultText = await response.text();
+            alert(resultText.trim() === 'success' ? 'Email sent successfully!' : `Error sending email: ${resultText}`);
+            if (isModalOpen) closeModal();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while sending the email.');
+        }
+    };
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
 
     return (
         <>
@@ -57,67 +116,67 @@ function VisualTest() {
                             {/* Buttons with images that update the visual acuity value */}
                             <button
                                 className={`my-2 v-bt ${activeButton === 1 ? 'active' : ''}`} // Change class if the button is active
-                                onClick={() => handleButtonClick('6/60', 'Visit the doctor for more accurate test', 1)}
+                                onClick={() => handleButtonClick('6/60', 'Visit the doctor for more accurate test', 1, v_1)}
                             >
                                 <img src={v_1} alt="" className="img-fluid p-3" />
                             </button>
                             <button
                                 className={`my-2 v-bt ${activeButton === 2 ? 'active' : ''}`} // Change class if the button is active
-                                onClick={() => handleButtonClick('6/30', 'Visit the doctor for more accurate test', 2)}
+                                onClick={() => handleButtonClick('6/30', 'Visit the doctor for more accurate test', 2, v_2)}
                             >
                                 <img src={v_2} alt="" className="img-fluid p-3" />
                             </button>
                             <button
                                 className={`my-2 v-bt ${activeButton === 3 ? 'active' : ''}`} // Change class if the button is active
-                                onClick={() => handleButtonClick('6/21', 'Visit the doctor for more accurate test', 3)}
+                                onClick={() => handleButtonClick('6/21', 'Visit the doctor for more accurate test', 3, v_3)}
                             >
                                 <img src={v_3} alt="" className="img-fluid p-3" />
                             </button>
                             <button
                                 className={`my-2 v-bt ${activeButton === 4 ? 'active' : ''}`} // Change class if the button is active
-                                onClick={() => handleButtonClick('6/15', 'Visit the doctor for more accurate test', 4)}
+                                onClick={() => handleButtonClick('6/15', 'Visit the doctor for more accurate test', 4 ,v_4)}
                             >
                                 <img src={v_4} alt="" className="img-fluid p-3" />
                             </button>
                             <button
                                 className={`my-2 v-bt ${activeButton === 5 ? 'active' : ''}`} // Change class if the button is active
-                                onClick={() => handleButtonClick('6/12', 'Visit the doctor for more accurate test', 5)}
+                                onClick={() => handleButtonClick('6/12', 'Visit the doctor for more accurate test', 5, v_5)}
                             >
                                 <img src={v_5} alt="" className="img-fluid p-3" />
                             </button>
                             <button
                                 className={`my-2 v-bt ${activeButton === 6 ? 'active' : ''}`} // Change class if the button is active
-                                onClick={() => handleButtonClick('6/9', 'Visit the doctor for more accurate test', 6)}
+                                onClick={() => handleButtonClick('6/9', 'Visit the doctor for more accurate test', 6, v_6)}
                             >
                                 <img src={v_6} alt="" className="img-fluid p-3" />
                             </button>
                             <button
                                 className={`my-2 v-bt ${activeButton === 7 ? 'active' : ''}`} // Change class if the button is active
-                                onClick={() => handleButtonClick('6/7.5', 'Continue to take care of the health of your eyes', 7)}
+                                onClick={() => handleButtonClick('6/7.5', 'Continue to take care of the health of your eyes', 7, v_7)}
                             >
                                 <img src={v_7} alt="" className="img-fluid p-3" />
                             </button>
                             <button
                                 className={`my-2 v-bt ${activeButton === 8 ? 'active' : ''}`} // Change class if the button is active
-                                onClick={() => handleButtonClick('6/6', 'Continue to take care of the health of your eyes', 8)}
+                                onClick={() => handleButtonClick('6/6', 'Continue to take care of the health of your eyes', 8, v_8)}
                             >
                                 <img src={v_8} alt="" className="img-fluid p-3" />
                             </button>
                             <button
                                 className={`my-2 v-bt ${activeButton === 9 ? 'active' : ''}`} // Change class if the button is active
-                                onClick={() => handleButtonClick('6/6', 'Continue to take care of the health of your eyes', 9)}
+                                onClick={() => handleButtonClick('6/6', 'Continue to take care of the health of your eyes', 9, v_9)}
                             >
                                 <img src={v_9} alt="" className="img-fluid p-3" />
                             </button>
                             <button
                                 className={`my-2 v-bt ${activeButton === 10 ? 'active' : ''}`} // Change class if the button is active
-                                onClick={() => handleButtonClick('6/6', 'Continue to take care of the health of your eyes', 10)}
+                                onClick={() => handleButtonClick('6/6', 'Continue to take care of the health of your eyes', 10, v_10)}
                             >
                                 <img src={v_10} alt="" className="img-fluid p-3" />
                             </button>
                             <button
                                 className={`my-2 v-bt ${activeButton === 11 ? 'active' : ''}`} // Change class if the button is active
-                                onClick={() => handleButtonClick('6/6', 'Continue to take care of the health of your eyes', 11)}
+                                onClick={() => handleButtonClick('6/6', 'Continue to take care of the health of your eyes', 11, v_11)}
                             >
                                 <img src={v_11} alt="" className="img-fluid p-3" />
                             </button>
@@ -128,6 +187,31 @@ function VisualTest() {
                             <h3>{visualAcuity}</h3>
                             <h6>Visual acuity</h6>
                             <p style={{ color: '#0d8c60' }}>{message}</p>
+                            {selectedImage && (
+                                <div>
+                                <img src={selectedImage} alt="Selected Visual" className="img-fluid mt-2" style={{ maxHeight: "200px" }} />
+                                </div>
+                            )}
+                            <div className="social-container" style={{ marginTop: '20px' }}>
+                                    <h5><strong>Share your Score</strong></h5>
+                                        <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button onClick={openModal}>
+                                                    <SiGmail size={24} />
+                                                </button>
+                                            </li>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                    <FaWhatsapp size={24} />
+                                                </button>
+                                            </li>
+                                            <li style={{ margin: '0 10px' }}>
+                                                <button href="https://facebook.com/">
+                                                    <FaFacebook size={24} />
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
                         </div>
 
                         <div className="col-md-7 first_section mt-2">
@@ -144,6 +228,49 @@ function VisualTest() {
                     </div>
                 </div>
             </section>
+
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                contentLabel="Send Results to Email"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "400px",
+                        height: "300px",
+                        margin: "auto",
+                        padding: "20px",
+                    },
+                }}
+            >
+                <h2>Send Your Results to Email</h2>
+                <form onSubmit={sendResultsToEmail}>
+                    <div className="form-group">
+                        <label htmlFor="email">Name</label>
+                        <input
+                            type="name"
+                            id="name"
+                            className="form-control my-2"
+                            placeholder="Enter your name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                        <label htmlFor="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            className="form-control my-2"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-primary mx-3">Send</button>
+                    <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
+                </form>
+            </Modal>
         </>
     );
 }
