@@ -126,17 +126,17 @@ function Contact_us() {
                                             <div className="right_conatct_social_icon d-flex align-items-end justify-content-center">
                                                 <ul className="socil_item_inner d-flex">
                                                     <li>
-                                                        <a href="#" onClick={(e) => e.preventDefault()}>
+                                                        <a href="https://www.facebook.com/" onClick={(e) => e.preventDefault()}>
                                                             <FontAwesomeIcon icon={faFacebook} />
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" onClick={(e) => e.preventDefault()}>
+                                                        <a href="https://wa.me/9150036318?text=Your%20Health%20Test%20Tool!" onClick={(e) => e.preventDefault()}>
                                                             <FontAwesomeIcon icon={faWhatsapp} />
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" onClick={(e) => e.preventDefault()}>
+                                                        <a href="https://www.instagram.com/" onClick={(e) => e.preventDefault()}>
                                                             <FontAwesomeIcon icon={faInstagram} />
                                                         </a>
                                                     </li>

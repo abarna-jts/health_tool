@@ -9,6 +9,7 @@ import reduce_cal from '../assets/img/reduce_cal.png';
 import Modal from "react-modal";
 import { FaFacebook, FaWhatsapp } from 'react-icons/fa';
 import { SiGmail } from 'react-icons/si';
+import { FaCheckCircle } from "react-icons/fa";
 
 const CalorieCalculator = () => {
     const [weight, setWeight] = useState('');
@@ -25,6 +26,7 @@ const CalorieCalculator = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -143,8 +145,12 @@ const CalorieCalculator = () => {
             });
     
             const resultText = await response.text();
-            alert(resultText.trim() === 'success' ? 'Email sent successfully!' : `Error sending email: ${resultText}`);
-            if (isModalOpen) closeModal();
+            if (resultText.trim() === 'success') {
+                setIsModalOpen(false);
+                setIsSuccessModalOpen(true);
+            } else {
+                alert(`Error sending email: ${resultText}`);
+            }
         } catch (error) {
             console.error('Error:', error);
             alert('An error occurred while sending the email.');
@@ -160,9 +166,20 @@ const CalorieCalculator = () => {
         }
     }, [bmi]);
 
+    const openWhatsapp=()=>{
+        const url = 'https://wa.me/9150036318?text=Your%20Pregnancy%20Test%20Result!';
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    const openFacebook=()=>{
+        const url='https://www.facebook.com/';
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+    const closeSuccessModal = () => setIsSuccessModalOpen(false);
 
     return (
         <>
@@ -171,7 +188,7 @@ const CalorieCalculator = () => {
                     <div className="row d-flex justify-content-center align-items-center">
                         <div className="col-md-7 ">
                             <div className="title text-center text-nowrap">
-                                <div className="nd-title">Calories Calculation</div>
+                                <div className="nd-title">Calories Calculate</div>
                             </div>
                             <div className="para-desc text-justify">
                                     <p><strong>Overview:</strong> Is a calculation based on the number of calories consumed / male (female / female) on several factors such as weight, height, age, and type of daily physical activity.</p>
@@ -288,12 +305,12 @@ const CalorieCalculator = () => {
                                                         </button>
                                                     </li>
                                                     <li style={{ margin: '0 10px' }}>
-                                                        <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!" target="_blank" rel="noopener noreferrer">
+                                                        <button onClick={openWhatsapp} target="_blank" rel="noopener noreferrer">
                                                             <FaWhatsapp size={24} />
                                                         </button>
                                                     </li>
                                                     <li style={{ margin: '0 10px' }}>
-                                                        <button href="https://facebook.com/" target="_blank" rel="noopener noreferrer">
+                                                        <button onClick={openFacebook} target="_blank" rel="noopener noreferrer">
                                                             <FaFacebook size={24} />
                                                         </button>
                                                     </li>
@@ -382,6 +399,38 @@ const CalorieCalculator = () => {
 
                 </div>
             </section>
+
+            <style jsx>{`
+            @keyframes zoomInOut {
+                        0% {
+                            transform: scale(0.8);
+                            opacity: 0;
+                        }
+                        100% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                    }
+
+                    @keyframes zoomOut {
+                        0% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: scale(0.8);
+                            opacity: 0;
+                        }
+                    }
+
+                    .successModalContent {
+                        animation: zoomInOut 0.5s ease-out forwards;
+                    }
+            `}
+            
+            </style>
+
+
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}
@@ -422,6 +471,31 @@ const CalorieCalculator = () => {
                     <button type="submit" className="btn btn-primary mx-3">Send</button>
                     <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
                 </form>
+            </Modal>
+
+            <Modal
+                isOpen={isSuccessModalOpen}
+                onRequestClose={closeSuccessModal}
+                contentLabel="Success Message"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "350px",
+                        height: "250px",
+                        margin: "auto",
+                        padding: "20px",
+                        textAlign: "center",
+                    },
+                }}
+            >
+                <div className="successModalContent">
+                    <FaCheckCircle size={40} color="green" />
+                    <h2>Email Sent!</h2>
+                    <p>Your results have been sent successfully to your email.</p>
+                    <button onClick={closeSuccessModal} className="btn btn-primary mt-3">
+                        Close
+                    </button>
+                </div>
             </Modal>
 
         </>

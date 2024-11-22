@@ -14,6 +14,7 @@ import rate_emoji_3 from '../assets/img/rate_emoji1.png'
 import Modal from "react-modal";
 import { FaFacebook, FaWhatsapp } from 'react-icons/fa';
 import { SiGmail } from 'react-icons/si';
+import { FaCheckCircle } from "react-icons/fa";
 
 function Asthuma() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,6 +23,7 @@ function Asthuma() {
     const [visibleBox, setVisibleBox] = useState(null);
     const [heading, setHeading] = useState("");
     const [selectedCard, setSelectedCard] = useState(null);
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
     // Define click handler functions for each button
     const handleButton1Click = () => {
@@ -157,10 +159,20 @@ useEffect(() => {
         }
     }, [allQuestionsAnswered1]);
 
+    const openWhatsApp=()=>{
+        const url='https://wa.me/9150036318?text=Your%20Pregnancy%20Test%20Result!';
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    const openFacebook=()=>{
+        const url='https://www.facebook.com/';
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
     
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+    const closeSuccessModal = () => setIsSuccessModalOpen(false);
 
     const sendResultsToEmail = async (e) => {
         e.preventDefault();
@@ -182,8 +194,12 @@ useEffect(() => {
             });
     
             const resultText = await response.text();
-            alert(resultText.trim() === 'success' ? 'Email sent successfully!' : `Error sending email: ${resultText}`);
-            if (isModalOpen) closeModal();
+            if (resultText.trim() === 'success') {
+                setIsModalOpen(false);
+                setIsSuccessModalOpen(true);
+            } else {
+                alert(`Error sending email: ${resultText}`);
+            }
         } catch (error) {
             console.error('Error:', error);
             alert('An error occurred while sending the email.');
@@ -323,7 +339,7 @@ useEffect(() => {
                                                         <img src={emoji_5} alt="" />
                                                         <div className="mark-card">
                                                             <h6>(3)</h6>
-                                                            <p style={{ minHeight: 48 }}>It’s not a problem</p>
+                                                            <p>It’s not a problem</p>
                                                         </div>
                                                     </button>
                                                 </div>
@@ -675,12 +691,12 @@ useEffect(() => {
                                                         </button>
                                                     </li>
                                                     <li style={{ margin: '0 10px' }}>
-                                                        <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                        <button onClick={openWhatsApp}>
                                                             <FaWhatsapp size={24} />
                                                         </button>
                                                     </li>
                                                     <li style={{ margin: '0 10px' }}>
-                                                        <button href="https://facebook.com/">
+                                                        <button onClick={openFacebook}>
                                                             <FaFacebook size={24} />
                                                         </button>
                                                     </li>
@@ -1018,12 +1034,12 @@ useEffect(() => {
                                                 </button>
                                             </li>
                                             <li style={{ margin: '0 10px' }}>
-                                                <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                <button >
                                                     <FaWhatsapp size={24} />
                                                 </button>
                                             </li>
                                             <li style={{ margin: '0 10px' }}>
-                                                <button href="https://facebook.com/">
+                                                <button>
                                                     <FaFacebook size={24} />
                                                 </button>
                                             </li>
@@ -1045,6 +1061,64 @@ useEffect(() => {
                     )}
                 </div>
             </div>
+            <style jsx>{`
+                .selected-value-box {
+                    margin-top: 10px;
+                    padding: 7px 10px;
+                    background-color: #ffffff;
+                    border: 2px solid #0d8c60;
+                    border-radius: 5px;
+                    font-size: 14px;
+                    font-weight: bold;
+                    color: #0d8c60;
+                    width: fit-content;
+                    position: relative;
+                    top: -60px;
+                    right: -50px;
+                    float: right;
+                }
+
+                .radio-label {
+                    display: flex;
+                    align-items: center;
+                    cursor: pointer;
+                }
+
+                .radio-input {
+                    display: none;
+                }
+
+                .emoji {
+                    margin-right: 10px;
+                    font-size: 14px;
+                }
+                @keyframes zoomInOut {
+                        0% {
+                            transform: scale(0.8);
+                            opacity: 0;
+                        }
+                        100% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                    }
+
+                    @keyframes zoomOut {
+                        0% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: scale(0.8);
+                            opacity: 0;
+                        }
+                    }
+
+                    .successModalContent {
+                        animation: zoomInOut 0.5s ease-out forwards;
+                    }
+                
+            `}</style>
             
             <Modal
                 isOpen={isModalOpen}
@@ -1087,6 +1161,31 @@ useEffect(() => {
                     <button type="submit" className="btn btn-primary mx-3">Send</button>
                     <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
                 </form>
+            </Modal>
+
+            <Modal
+                isOpen={isSuccessModalOpen}
+                onRequestClose={closeSuccessModal}
+                contentLabel="Success Message"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "350px",
+                        height: "250px",
+                        margin: "auto",
+                        padding: "20px",
+                        textAlign: "center",
+                    },
+                }}
+            >
+                <div className="successModalContent">
+                    <FaCheckCircle size={40} color="green" />
+                    <h2>Email Sent!</h2>
+                    <p>Your results have been sent successfully to your email.</p>
+                    <button onClick={closeSuccessModal} className="btn btn-primary mt-3">
+                        Close
+                    </button>
+                </div>
             </Modal>
         </>
     )

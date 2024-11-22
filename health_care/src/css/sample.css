@@ -159,3 +159,32 @@
       border-radius: 30px;
       overflow: hidden;
   }
+
+  @media (max-width:768px) {
+    .contact_field {
+        padding: 20px 20px 20px 20px;
+        }
+        .contact_field {
+            padding: 20px 20px 20px 20px;
+        }
+        .socil_item_inner {
+            padding-left: 0rem;
+            padding-bottom: 0px;
+            padding: 15px;
+            margin-bottom: 0rem;
+        }
+        .contact_info_sec {
+            position: relative;
+            background-color: #2d2d2d;
+            right: 1px;
+            top: 18%;
+            height: 340px;
+            width: 100%;
+            padding: 30px;
+            border-radius: 0px;
+        }
+        .contact_us {
+            background-color: #f1f1f1;
+            padding: 20px 0px;
+        }
+  }

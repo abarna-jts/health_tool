@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import { FaFacebook, FaWhatsapp } from 'react-icons/fa';
 import { SiGmail } from 'react-icons/si';
+import { FaCheckCircle } from "react-icons/fa";
 
 function Depression() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
 
@@ -54,33 +56,46 @@ function Depression() {
             alert("Please provide your name and email.");
             return;
         }
-        
+
         const data = { 
             email, name, 
             totalScore_depression,
             responses,
         };
-    
+
         try {
             const response = await fetch('https://health-tool.jorim.net/backend-gmail/anxiety-mail.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
             });
-    
+
             const resultText = await response.text();
-            alert(resultText.trim() === 'success' ? 'Email sent successfully!' : `Error sending email: ${resultText}`);
-            if (isModalOpen) closeModal();
+            if (resultText.trim() === 'success') {
+                setIsModalOpen(false);
+                setIsSuccessModalOpen(true);
+            } else {
+                alert(`Error sending email: ${resultText}`);
+            }
         } catch (error) {
             console.error('Error:', error);
             alert('An error occurred while sending the email.');
         }
     };
 
+    const openWhatsapp=()=>{
+        const url = 'https://wa.me/9150036318?text=Your%20Pregnancy%20Test%20Result!';
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    const openFacebook=()=>{
+        const url='https://www.facebook.com/';
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
-
+    const closeSuccessModal = () => setIsSuccessModalOpen(false);
 
     return (
         <>
@@ -165,12 +180,12 @@ function Depression() {
                                                 </button>
                                             </li>
                                             <li style={{ margin: '0 10px' }}>
-                                                <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                <button onClick={openWhatsapp}>
                                                     <FaWhatsapp size={24} />
                                                 </button>
                                             </li>
                                             <li style={{ margin: '0 10px' }}>
-                                                <button href="https://facebook.com/">
+                                                <button onClick={openFacebook}>
                                                     <FaFacebook size={24} />
                                                 </button>
                                             </li>
@@ -220,9 +235,36 @@ function Depression() {
                     font-weight: bold;
                     color: #0d8c60;
                 }
+                   @keyframes zoomInOut {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes zoomOut {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+}
+
+.successModalContent {
+    animation: zoomInOut 0.5s ease-out forwards;
+}
+
+
             `}</style>
 
-<Modal
+            <Modal
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}
                 contentLabel="Send Results to Email"
@@ -263,6 +305,32 @@ function Depression() {
                     <button type="submit" className="btn btn-primary mx-3">Send</button>
                     <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
                 </form>
+            </Modal>
+
+            {/* Success Modal */}
+            <Modal
+                isOpen={isSuccessModalOpen}
+                onRequestClose={closeSuccessModal}
+                contentLabel="Success Message"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "350px",
+                        height: "250px",
+                        margin: "auto",
+                        padding: "20px",
+                        textAlign: "center",
+                    },
+                }}
+            >
+                <div className="successModalContent">
+                    <FaCheckCircle size={40} color="green" />
+                    <h2>Email Sent!</h2>
+                    <p>Your results have been sent successfully to your email.</p>
+                    <button onClick={closeSuccessModal} className="btn btn-primary mt-3">
+                        Close
+                    </button>
+                </div>
             </Modal>
         </>
     );

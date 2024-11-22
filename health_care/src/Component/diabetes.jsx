@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import { FaFacebook, FaWhatsapp } from 'react-icons/fa';
 import { SiGmail } from 'react-icons/si';
-
+import { FaCheckCircle } from "react-icons/fa";
 
 function Diabetes() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const questions = [
         {
             id: 1,
@@ -252,16 +253,23 @@ function Diabetes() {
             });
     
             const resultText = await response.text();
-            alert(resultText.trim() === 'success' ? 'Email sent successfully!' : `Error sending email: ${resultText}`);
-            
-            // Close modal if it was opened
-            if (isModalOpen) closeModal();
+            if (resultText.trim() === 'success') {
+                setIsModalOpen(false);
+                setIsSuccessModalOpen(true);
+            } else {
+                alert(`Error sending email: ${resultText}`);
+            }
         } catch (error) {
             console.error('Error:', error);
             alert('An error occurred while sending the email.');
         }
     };
     
+    const openWhatsapp=()=>{
+        const url = 'https://wa.me/9150036318?text=Your%20Pregnancy%20Test%20Result!';
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
     useEffect(() => {
         if (calculateTotalPoints) {
             const completionElement = document.getElementById("completion-status");
@@ -273,6 +281,12 @@ function Diabetes() {
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+    const closeSuccessModal = () => setIsSuccessModalOpen(false);
+
+    const openFacebook=()=>{
+        const url='https://www.facebook.com/';
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
 
     return (
         <>
@@ -404,12 +418,12 @@ function Diabetes() {
                                                 </button>
                                             </li>
                                             <li style={{ margin: '0 10px' }}>
-                                                <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                <button onClick={openWhatsapp}>
                                                     <FaWhatsapp size={24} />
                                                 </button>
                                             </li>
                                             <li style={{ margin: '0 10px' }}>
-                                                <button href="https://facebook.com/">
+                                                <button onClick={openFacebook}>
                                                     <FaFacebook size={24} />
                                                 </button>
                                             </li>
@@ -451,7 +465,31 @@ function Diabetes() {
                     margin-right: 10px;
                     font-size: 14px;
                 }
+                @keyframes zoomInOut {
+                        0% {
+                            transform: scale(0.8);
+                            opacity: 0;
+                        }
+                        100% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                    }
 
+                    @keyframes zoomOut {
+                        0% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: scale(0.8);
+                            opacity: 0;
+                        }
+                    }
+
+                    .successModalContent {
+                        animation: zoomInOut 0.5s ease-out forwards;
+                    }
                 
             `}</style>
 
@@ -496,6 +534,31 @@ function Diabetes() {
                     <button type="submit" className="btn btn-primary mx-3">Send</button>
                     <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
                 </form>
+            </Modal>
+
+            <Modal
+                isOpen={isSuccessModalOpen}
+                onRequestClose={closeSuccessModal}
+                contentLabel="Success Message"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "350px",
+                        height: "250px",
+                        margin: "auto",
+                        padding: "20px",
+                        textAlign: "center",
+                    },
+                }}
+            >
+                <div className="successModalContent">
+                    <FaCheckCircle size={40} color="green" />
+                    <h2>Email Sent!</h2>
+                    <p>Your results have been sent successfully to your email.</p>
+                    <button onClick={closeSuccessModal} className="btn btn-primary mt-3">
+                        Close
+                    </button>
+                </div>
             </Modal>
         </>
     );

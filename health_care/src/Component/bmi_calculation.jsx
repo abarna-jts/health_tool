@@ -7,6 +7,7 @@ import Modal from "react-modal";
 import { SiGmail } from "react-icons/si";
 import { FaWhatsapp, FaFacebook } from "react-icons/fa";
 import GaugeChart from 'react-gauge-chart';
+import { FaCheckCircle } from "react-icons/fa";
 
 function BMI_Calculation() {
     const [visibleBox, setVisibleBox] = useState(null);
@@ -18,6 +19,7 @@ function BMI_Calculation() {
     const [bmiSuggestion, setBmiSuggestion] = useState('');
     const [selectedCard, setSelectedCard] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
 
@@ -48,6 +50,8 @@ function BMI_Calculation() {
     };
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+    const closeSuccessModal = () => setIsSuccessModalOpen(false);
+
     const sendResultsToEmail = async (e) => {
         e.preventDefault();
         if (!email || !name) {
@@ -71,8 +75,12 @@ function BMI_Calculation() {
             });
     
             const resultText = await response.text();
-            alert(resultText.trim() === 'success' ? 'Email sent successfully!' : `Error sending email: ${resultText}`);
-            if (isModalOpen) closeModal();
+            if (resultText.trim() === 'success') {
+                setIsModalOpen(false);
+                setIsSuccessModalOpen(true);
+            } else {
+                alert(`Error sending email: ${resultText}`);
+            }
         } catch (error) {
             console.error('Error:', error);
             alert('An error occurred while sending the email.');
@@ -121,6 +129,16 @@ function BMI_Calculation() {
 
     // Convert BMI to a percentage for a gauge chart (optional)
     const bmiPercentage = bmi_cal ? (bmi_cal / 40) * 100 : 0;
+
+    const openWhatsapp = () => {
+        const url = 'https://wa.me/9150036318?text=Your%20Pregnancy%20Test%20Result!';
+        window.open(url, '_blank', 'noopener,noreferrer');
+    };
+
+    const openFacebook=()=>{
+        const url='https://www.facebook.com/';
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
 
     return (
         <>
@@ -259,12 +277,12 @@ function BMI_Calculation() {
                                                                             </button>
                                                                         </li>
                                                                         <li style={{ margin: '0 10px' }}>
-                                                                            <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                                            <button onClick={openWhatsapp}>
                                                                                 <FaWhatsapp size={24} />
                                                                             </button>
                                                                         </li>
                                                                         <li style={{ margin: '0 10px' }}>
-                                                                            <button href="https://facebook.com/">
+                                                                            <button onClick={openFacebook}>
                                                                                 <FaFacebook size={24} />
                                                                             </button>
                                                                         </li>
@@ -366,7 +384,7 @@ function BMI_Calculation() {
                                                                 <p className="text-center"><strong>BMI Category:</strong> {bmiCategory}</p>
                                                                 <p className="text-justify"><strong>Suggestion: </strong>{bmiSuggestion}</p>
                                                                 </div>
-                                                                <div className="social-container" style={{ marginTop: '20px' }}>
+                                                                <div className="social-container bmi_share_btn" style={{ marginTop: '20px' }}>
                                                                 <h5><strong>Share your Score</strong></h5>
                                                                 <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
                                                                     <li style={{ margin: '0 10px' }}>
@@ -375,12 +393,12 @@ function BMI_Calculation() {
                                                                         </button>
                                                                     </li>
                                                                     <li style={{ margin: '0 10px' }}>
-                                                                        <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                                        <button onClick={openWhatsapp}>
                                                                             <FaWhatsapp size={24} />
                                                                         </button>
                                                                     </li>
                                                                     <li style={{ margin: '0 10px' }}>
-                                                                        <button href="https://facebook.com/">
+                                                                        <button onClick={openFacebook}>
                                                                             <FaFacebook size={24} />
                                                                         </button>
                                                                     </li>
@@ -407,6 +425,71 @@ function BMI_Calculation() {
 
                 </div>
             </section>
+
+            <style jsx>{`
+                .selected-value-box {
+                    margin-top: 10px;
+                    padding: 7px 10px;
+                    background-color: #ffffff;
+                    border: 2px solid #0d8c60;
+                    border-radius: 5px;
+                    font-size: 14px;
+                    font-weight: bold;
+                    color: #0d8c60;
+                    width: fit-content;
+                    position: relative;
+                    top: -60px;
+                    right: -50px;
+                    float: right;
+                }
+
+                .radio-label {
+                    display: flex;
+                    align-items: center;
+                    cursor: pointer;
+                }
+
+                .radio-input {
+                    display: none;
+                }
+
+                .emoji {
+                    margin-right: 10px;
+                    font-size: 14px;
+                }
+
+                .selected {
+                    font-weight: bold;
+                    color: #0d8c60;
+                }
+                     @keyframes zoomInOut {
+                        0% {
+                            transform: scale(0.8);
+                            opacity: 0;
+                        }
+                        100% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                    }
+
+                    @keyframes zoomOut {
+                        0% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: scale(0.8);
+                            opacity: 0;
+                        }
+                    }
+
+                    .successModalContent {
+                        animation: zoomInOut 0.5s ease-out forwards;
+                    }
+            `}</style>
+
+
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}
@@ -448,6 +531,31 @@ function BMI_Calculation() {
                     <button type="submit" className="btn btn-primary mx-3">Send</button>
                     <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
                 </form>
+            </Modal>
+
+            <Modal
+                isOpen={isSuccessModalOpen}
+                onRequestClose={closeSuccessModal}
+                contentLabel="Success Message"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "350px",
+                        height: "250px",
+                        margin: "auto",
+                        padding: "20px",
+                        textAlign: "center",
+                    },
+                }}
+            >
+                <div className="successModalContent">
+                    <FaCheckCircle size={40} color="green" />
+                    <h2>Email Sent!</h2>
+                    <p>Your results have been sent successfully to your email.</p>
+                    <button onClick={closeSuccessModal} className="btn btn-primary mt-3">
+                        Close
+                    </button>
+                </div>
             </Modal>
         </>
 

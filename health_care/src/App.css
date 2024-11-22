@@ -972,6 +972,9 @@
      display: block;
      padding: 10px;
    }
+   .box-class ul{
+    padding-left: 0.8rem;
+   }
 
    .nd-title {
      font-size: 20px;
@@ -1060,13 +1063,20 @@
       top: -58px !important;
   }
    .ReactModal__Content{
-    width: 342px !important;
-    height: 291px !important;
-    margin: auto 10px !important;
+    width: 316px !important;
+        height: 264px !important;
+        margin: auto 6px !important;
+        padding: 10px !important;
+   }
+   .successModalContent {
+    padding-top: 25px;
    }
    .completion-status{
     width: 100%;
    }
+   ol, ul {
+    padding-left: 0.8rem;
+}
    .calories {
      width: 127px !important;
      height: auto;
@@ -1124,6 +1134,9 @@
      margin-left: 0px;
      margin-right: 8px;
    }
+
+   
+
  }
 
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import { SiGmail } from "react-icons/si";
 import { FaWhatsapp, FaFacebook } from "react-icons/fa";
+import { FaCheckCircle } from "react-icons/fa";
 
 function IdealBodyWeight() {
     const [height, setHeight] = useState('');
@@ -9,6 +10,7 @@ function IdealBodyWeight() {
     const [isModalOpen, setIsModalOpen] = useState(false); // State to control the modal visibility
     const [email, setEmail] = useState('');
     const [name, setName] = useState(''); // Email state for the form input
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
     // Function to handle opening the modal
     const openModal = () => {
@@ -19,6 +21,7 @@ function IdealBodyWeight() {
     const closeModal = () => {
         setIsModalOpen(false);
     };
+    const closeSuccessModal = () => setIsSuccessModalOpen(false);
 
     // Function to handle the email sending logic
     const sendResultsToEmail = async (e) => {
@@ -42,8 +45,12 @@ function IdealBodyWeight() {
             });
     
             const resultText = await response.text();
-            alert(resultText.trim() === 'success' ? 'Email sent successfully!' : `Error sending email: ${resultText}`);
-            if (isModalOpen) closeModal();
+            if (resultText.trim() === 'success') {
+                setIsModalOpen(false);
+                setIsSuccessModalOpen(true);
+            } else {
+                alert(`Error sending email: ${resultText}`);
+            }
         } catch (error) {
             console.error('Error:', error);
             alert('An error occurred while sending the email.');
@@ -66,6 +73,16 @@ function IdealBodyWeight() {
         setIbw(idealWeight.toFixed(2));
     };
 
+    const openWhatsapp=()=>{
+        const url = 'https://wa.me/9150036318?text=Your%20Pregnancy%20Test%20Result!';
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    const openFacebook=()=>{
+        const url='https://www.facebook.com/';
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
+    
     return (
         <>
             <section className="pt-3 pb-3">
@@ -119,12 +136,12 @@ function IdealBodyWeight() {
                                                 </button>
                                             </li>
                                             <li style={{ margin: '0 10px' }}>
-                                                <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                <button onClick={openWhatsapp}>
                                                     <FaWhatsapp size={24} />
                                                 </button>
                                             </li>
                                             <li style={{ margin: '0 10px' }}>
-                                                <button href="https://facebook.com/">
+                                                <button onClick={openFacebook}>
                                                     <FaFacebook size={24} />
                                                 </button>
                                             </li>
@@ -136,6 +153,35 @@ function IdealBodyWeight() {
                     </div>
                 </div>
             </section>
+            <style jsx>{`
+            @keyframes zoomInOut {
+                        0% {
+                            transform: scale(0.8);
+                            opacity: 0;
+                        }
+                        100% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                    }
+
+                    @keyframes zoomOut {
+                        0% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: scale(0.8);
+                            opacity: 0;
+                        }
+                    }
+
+                    .successModalContent {
+                        animation: zoomInOut 0.5s ease-out forwards;
+                    }
+            `}
+            
+            </style>
 
             {/* Modal for the Gmail form */}
             <Modal
@@ -179,6 +225,30 @@ function IdealBodyWeight() {
                     <button type="submit" className="btn btn-primary mx-3">Send</button>
                     <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
                 </form>
+            </Modal>
+            <Modal
+                isOpen={isSuccessModalOpen}
+                onRequestClose={closeSuccessModal}
+                contentLabel="Success Message"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "350px",
+                        height: "250px",
+                        margin: "auto",
+                        padding: "20px",
+                        textAlign: "center",
+                    },
+                }}
+            >
+                <div className="successModalContent">
+                    <FaCheckCircle size={40} color="green" />
+                    <h2>Email Sent!</h2>
+                    <p>Your results have been sent successfully to your email.</p>
+                    <button onClick={closeSuccessModal} className="btn btn-primary mt-3">
+                        Close
+                    </button>
+                </div>
             </Modal>
         </>
     );

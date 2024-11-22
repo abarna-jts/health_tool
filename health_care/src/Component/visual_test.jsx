@@ -13,6 +13,7 @@ import v_11 from '../assets/img/v-11.png';
 import Modal from "react-modal";
 import { FaFacebook, FaWhatsapp } from 'react-icons/fa';
 import { SiGmail } from 'react-icons/si';
+import { FaCheckCircle } from "react-icons/fa";
 
 
 function VisualTest() {
@@ -20,10 +21,11 @@ function VisualTest() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     // Set initial state for the visual acuity value and message
-    const [visualAcuity, setVisualAcuity] = useState('6/60');
+    const [visualAcuity, setVisualAcuity] = useState('Click any image you can see clearly, and I will score it.');
     const [message, setMessage] = useState('Visit the doctor for a more accurate test');
     const [activeButton, setActiveButton] = useState(null);  // To track the active button
     const [selectedImage, setSelectedImage] = useState(null);
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const totalScoreRef = useRef(null);
 
     // Function to update the visual acuity value and message, and set active button background color
@@ -75,16 +77,31 @@ function VisualTest() {
             });
     
             const resultText = await response.text();
-            alert(resultText.trim() === 'success' ? 'Email sent successfully!' : `Error sending email: ${resultText}`);
-            if (isModalOpen) closeModal();
+            if (resultText.trim() === 'success') {
+                setIsModalOpen(false);
+                setIsSuccessModalOpen(true);
+            } else {
+                alert(`Error sending email: ${resultText}`);
+            }
         } catch (error) {
             console.error('Error:', error);
             alert('An error occurred while sending the email.');
         }
     };
 
+    const openWhatsapp=()=>{
+        const url = 'https://wa.me/9150036318?text=Your%20Pregnancy%20Test%20Result!';
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    const openFacebook=()=>{
+        const url='https://www.facebook.com/';
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+    const closeSuccessModal = () => setIsSuccessModalOpen(false);
 
     return (
         <>
@@ -201,12 +218,12 @@ function VisualTest() {
                                                 </button>
                                             </li>
                                             <li style={{ margin: '0 10px' }}>
-                                                <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                <button onClick={openWhatsapp}>
                                                     <FaWhatsapp size={24} />
                                                 </button>
                                             </li>
                                             <li style={{ margin: '0 10px' }}>
-                                                <button href="https://facebook.com/">
+                                                <button onClick={openFacebook}>
                                                     <FaFacebook size={24} />
                                                 </button>
                                             </li>
@@ -228,6 +245,36 @@ function VisualTest() {
                     </div>
                 </div>
             </section>
+
+            <style jsx>{`
+            @keyframes zoomInOut {
+                        0% {
+                            transform: scale(0.8);
+                            opacity: 0;
+                        }
+                        100% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                    }
+
+                    @keyframes zoomOut {
+                        0% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: scale(0.8);
+                            opacity: 0;
+                        }
+                    }
+
+                    .successModalContent {
+                        animation: zoomInOut 0.5s ease-out forwards;
+                    }
+            `}
+            
+            </style>
 
             <Modal
                 isOpen={isModalOpen}
@@ -270,6 +317,31 @@ function VisualTest() {
                     <button type="submit" className="btn btn-primary mx-3">Send</button>
                     <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
                 </form>
+            </Modal>
+
+            <Modal
+                isOpen={isSuccessModalOpen}
+                onRequestClose={closeSuccessModal}
+                contentLabel="Success Message"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "350px",
+                        height: "250px",
+                        margin: "auto",
+                        padding: "20px",
+                        textAlign: "center",
+                    },
+                }}
+            >
+                <div className="successModalContent">
+                    <FaCheckCircle size={40} color="green" />
+                    <h2>Email Sent!</h2>
+                    <p>Your results have been sent successfully to your email.</p>
+                    <button onClick={closeSuccessModal} className="btn btn-primary mt-3">
+                        Close
+                    </button>
+                </div>
             </Modal>
         </>
     );

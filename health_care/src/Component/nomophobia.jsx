@@ -2,11 +2,13 @@ import React, {useState, useEffect} from "react";
 import Modal from "react-modal";
 import { FaFacebook, FaWhatsapp } from 'react-icons/fa';
 import { SiGmail } from 'react-icons/si';
+import { FaCheckCircle } from "react-icons/fa";
 
 function Nomophobia(){
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
     const questions = [
         "I feel stressed without constant access to information through my mobile.",
@@ -31,13 +33,13 @@ function Nomophobia(){
     ];
 
     const options = [
-        { label: "1", value: 1 },
-        { label: "2", value: 2 },
-        { label: "3", value: 3 },
-        { label: "4", value: 4 },
-        { label: "5", value: 5 },
-        { label: "6", value: 6 },
-        { label: "7", value: 7 }
+        { label: "1", value: 1, emoji:"😔"},
+        { label: "2", value: 2, emoji:"😟" },
+        { label: "3", value: 3, emoji:"😐" },
+        { label: "4", value: 4, emoji:"🙂" },
+        { label: "5", value: 5, emoji:"😊" },
+        { label: "6", value: 6, emoji:"😄" },
+        { label: "7", value: 7, emoji:"😁" }
     ];
 
     const [responses, setResponses] = useState(Array(questions.length).fill(null));
@@ -62,6 +64,7 @@ function Nomophobia(){
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+    const closeSuccessModal = () => setIsSuccessModalOpen(false);
 
     const sendResultsToEmail = async (e) => {
         e.preventDefault();
@@ -84,13 +87,27 @@ function Nomophobia(){
             });
     
             const resultText = await response.text();
-            alert(resultText.trim() === 'success' ? 'Email sent successfully!' : `Error sending email: ${resultText}`);
-            if (isModalOpen) closeModal();
+            if (resultText.trim() === 'success') {
+                setIsModalOpen(false);
+                setIsSuccessModalOpen(true);
+            } else {
+                alert(`Error sending email: ${resultText}`);
+            }
         } catch (error) {
             console.error('Error:', error);
             alert('An error occurred while sending the email.');
         }
     };
+
+    const openWhatsapp=()=>{
+        const url = 'https://wa.me/9150036318?text=Your%20Pregnancy%20Test%20Result!';
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    const openFacebook=()=>{
+        const url='https://www.facebook.com/';
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
 
     return(
         <>
@@ -132,32 +149,35 @@ function Nomophobia(){
                         <div className="col-md-7">
                             {questions.map((question, questionIndex) => (
                                 <div key={questionIndex} className="question-box p-3 mb-3 anxiety-question n_q">
-                                    <h5 className="question-title">{questionIndex + 1}. {question}</h5>
-                                    <div className="toggle-options">
-                                        {options.map((option, optionIndex) => (
-                                            <div key={optionIndex}>
-                                                <label className="toggle-label">
-                                                    <input
-                                                        type="radio"
-                                                        name={`question-${questionIndex}`}
-                                                        className="toggle-input"
-                                                        value={option.value}
-                                                        onChange={() => handleOptionChange(questionIndex, option.value)}
-                                                        checked={responses[questionIndex] === option.value}
-                                                    />
-                                                    <span className="toggle-switch"></span>
-                                                    {option.label}
-                                                </label>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    {/* Display the selected value outside the question box with a border */}
-                                    {responses[questionIndex] !== null && (
-                                        <div className="selected-value-box">
-                                            {responses[questionIndex]}
+                                <h5 className="question-title">{questionIndex + 1}. {question}</h5>
+                                <div className="toggle-options d-flex flex-wrap">
+                                    {options.map((option, optionIndex) => (
+                                        <div key={optionIndex} className="option-box d-flex align-items-center mb-2 me-3">
+                                            <label
+                                                className={`radio-label d-flex align-items-center ${responses[questionIndex] === option.value ? "selected" : ""}`}
+                                            >
+                                                <span className="emoji me-2">
+                                                    {responses[questionIndex] === option.value ? option.emoji : "🔘"}
+                                                </span>
+                                                <span className="label-text me-2">{option.label}</span>
+                                                <input
+                                                    type="radio"
+                                                    name={`question-${questionIndex}`}
+                                                    className="toggle-input visually-hidden"
+                                                    value={option.value}
+                                                    onChange={() => handleOptionChange(questionIndex, option.value)}
+                                                    checked={responses[questionIndex] === option.value}
+                                                />
+                                            </label>
                                         </div>
-                                    )}
+                                    ))}
                                 </div>
+                                {responses[questionIndex] !== null && (
+                                    <div className="selected-value-box mt-2 p-2 border rounded">
+                                        {responses[questionIndex]}
+                                    </div>
+                                )}
+                            </div>
                             ))}
                             {/* Display the total box only after all questions are answered */}
                             {allQuestionsAnswered && (
@@ -218,12 +238,12 @@ function Nomophobia(){
                                                 </button>
                                             </li>
                                             <li style={{ margin: '0 10px' }}>
-                                                <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                <button onClick={openWhatsapp}>
                                                     <FaWhatsapp size={24} />
                                                 </button>
                                             </li>
                                             <li style={{ margin: '0 10px' }}>
-                                                <button href="https://facebook.com/">
+                                                <button onClick={openFacebook}>
                                                     <FaFacebook size={24} />
                                                 </button>
                                             </li>
@@ -252,9 +272,52 @@ function Nomophobia(){
                     right: -50px;
                     float: right;
                 }
-            `}</style>
+                    .radio-label {
+                    display: flex;
+                    align-items: center;
+                    cursor: pointer;
+                }
 
-<Modal
+                .radio-input {
+                    display: none;
+                }
+
+                .emoji {
+                    margin-right: 10px;
+                    font-size: 14px;
+                }
+
+                .selected {
+                    font-weight: bold;
+                    color: #0d8c60;
+                }
+                    @keyframes zoomInOut {
+                        0% {
+                            transform: scale(0.8);
+                            opacity: 0;
+                        }
+                        100% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                    }
+
+                    @keyframes zoomOut {
+                        0% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: scale(0.8);
+                            opacity: 0;
+                        }
+                    }
+
+                    .successModalContent {
+                        animation: zoomInOut 0.5s ease-out forwards;
+                    }
+            `}</style>
+            <Modal
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}
                 contentLabel="Send Results to Email"
@@ -295,6 +358,31 @@ function Nomophobia(){
                     <button type="submit" className="btn btn-primary mx-3">Send</button>
                     <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
                 </form>
+            </Modal>
+
+            <Modal
+                isOpen={isSuccessModalOpen}
+                onRequestClose={closeSuccessModal}
+                contentLabel="Success Message"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "350px",
+                        height: "250px",
+                        margin: "auto",
+                        padding: "20px",
+                        textAlign: "center",
+                    },
+                }}
+            >
+                <div className="successModalContent">
+                    <FaCheckCircle size={40} color="green" />
+                    <h2>Email Sent!</h2>
+                    <p>Your results have been sent successfully to your email.</p>
+                    <button onClick={closeSuccessModal} className="btn btn-primary mt-3">
+                        Close
+                    </button>
+                </div>
             </Modal>
         </>
     )

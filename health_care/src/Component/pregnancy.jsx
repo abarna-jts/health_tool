@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import { FaFacebook, FaWhatsapp } from 'react-icons/fa';
 import { SiGmail } from 'react-icons/si';
+import { FaCheckCircle } from "react-icons/fa";
 
 function Pregnancy() {
     const [day, setDay] = useState('');
@@ -11,14 +12,22 @@ function Pregnancy() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
     const calculateDates = () => {
         if (!day || !month || !year) {
             alert("Please select the full date of your last menstrual period.");
             return;
         }
+         // Convert month name to numeric index
+         const monthIndex = months.indexOf(month);
+    
+         if (monthIndex === -1) {
+             alert("Invalid month selected.");
+             return;
+         }
 
-        const lmp = new Date(year, month - 1, day); // month - 1 because month is zero-indexed in JavaScript Date
+        const lmp = new Date(year, monthIndex - 1, day); // month - 1 because month is zero-indexed in JavaScript Date
 
         // Calculate Ovulation Date
         const ovulationDate = new Date(lmp);
@@ -73,12 +82,14 @@ function Pregnancy() {
             });
     
             const result = await response.text(); // or `response.json()` if your PHP script returns JSON
-            console.log(result);
+            // console.log(result);
     
-            if (result === 'success') {
-                alert('Email sent successfully!');
+            
+            if (result.trim() === 'success') {
+                setIsModalOpen(false);
+                setIsSuccessModalOpen(true);
             } else {
-                alert('Error sending email.');
+                alert(`Error sending email: ${result}`);
             }
     
             closeModal(); // Close the modal
@@ -88,6 +99,17 @@ function Pregnancy() {
         }
     };
 
+    
+        const openWhatsApp = () => {
+            const url = 'https://wa.me/919150036318?text=Your%20Pregnancy%20Test%20Result!';
+            window.open(url, '_blank', 'noopener,noreferrer');
+        };
+
+        const openFacebook = () => {
+            const url = 'https://www.facebook.com/';
+            window.open(url, '_blank', 'noopener,noreferrer');
+        };
+    
 
     const formatDate = (date) => {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -96,11 +118,15 @@ function Pregnancy() {
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+    const closeSuccessModal = () => setIsSuccessModalOpen(false);
 
     // Arrays for day, month, and year options
     const days = Array.from({ length: 31 }, (_, i) => i + 1);
-    const months = Array.from({ length: 12 }, (_, i) => i + 1);
-    const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i);
+    const months = [
+        "January", "February", "March", "April", "May", "June", 
+        "July", "August", "September", "October", "November", "December"
+    ];
+    const years = Array.from({ length: 3 }, (_, i) => new Date().getFullYear() - i);
 
     return (
         <>
@@ -167,12 +193,12 @@ function Pregnancy() {
                                                         </button>
                                                     </li>
                                                     <li style={{ margin: '0 10px' }}>
-                                                        <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!" target="_blank" rel="noopener noreferrer">
+                                                        <button onClick={openWhatsApp} target="_blank" rel="noopener noreferrer">
                                                             <FaWhatsapp size={24} />
                                                         </button>
                                                     </li>
                                                     <li style={{ margin: '0 10px' }}>
-                                                        <button href="https://facebook.com/" target="_blank" rel="noopener noreferrer">
+                                                        <button onClick={openFacebook} target="_blank" rel="noopener noreferrer">
                                                             <FaFacebook size={24} />
                                                         </button>
                                                     </li>
@@ -186,6 +212,36 @@ function Pregnancy() {
                     </div>
                 </div>
             </section>
+
+            <style jsx>{`
+            @keyframes zoomInOut {
+                        0% {
+                            transform: scale(0.8);
+                            opacity: 0;
+                        }
+                        100% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                    }
+
+                    @keyframes zoomOut {
+                        0% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: scale(0.8);
+                            opacity: 0;
+                        }
+                    }
+
+                    .successModalContent {
+                        animation: zoomInOut 0.5s ease-out forwards;
+                    }
+            `}
+            
+            </style>
 
             <Modal
                 isOpen={isModalOpen}
@@ -228,6 +284,30 @@ function Pregnancy() {
                     <button type="submit" className="btn btn-primary mx-3">Send</button>
                     <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
                 </form>
+            </Modal>
+            <Modal
+                isOpen={isSuccessModalOpen}
+                onRequestClose={closeSuccessModal}
+                contentLabel="Success Message"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "350px",
+                        height: "250px",
+                        margin: "auto",
+                        padding: "20px",
+                        textAlign: "center",
+                    },
+                }}
+            >
+                <div className="successModalContent">
+                    <FaCheckCircle size={40} color="green" />
+                    <h2>Email Sent!</h2>
+                    <p>Your results have been sent successfully to your email.</p>
+                    <button onClick={closeSuccessModal} className="btn btn-primary mt-3">
+                        Close
+                    </button>
+                </div>
             </Modal>
         </>
     );

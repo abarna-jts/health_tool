@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaFacebook, FaWhatsapp } from 'react-icons/fa';
 import { SiGmail } from 'react-icons/si';
 import Modal from "react-modal";
+import { FaCheckCircle } from "react-icons/fa";
 
 function Pregnancy() {
     const [day, setDay] = useState('');
@@ -11,20 +12,29 @@ function Pregnancy() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
     const calculateDueDate = () => {
         if (!day || !month || !year) {
             alert("Please select the full date of your last menstrual period.");
             return;
         }
-
+    
+        // Convert month name to numeric index
+        const monthIndex = months.indexOf(month);
+    
+        if (monthIndex === -1) {
+            alert("Invalid month selected.");
+            return;
+        }
+    
         // Convert the entered day, month, and year into a Date object
-        const lmp = new Date(year, month - 1, day); // month - 1 because months are zero-indexed
-
+        const lmp = new Date(year, monthIndex, day); // monthIndex is 0-based
+    
         // Calculate Due Date (280 days or 40 weeks after LMP)
         const calculatedDueDate = new Date(lmp);
         calculatedDueDate.setDate(calculatedDueDate.getDate() + 280);
-
+    
         // Format the result and set the due date
         setDueDate(formatDate(calculatedDueDate));
     };
@@ -63,12 +73,13 @@ function Pregnancy() {
             const result = await response.text(); // or `response.json()` if your PHP script returns JSON
             console.log(result);
 
-            if (result === 'success') {
-                alert('Email sent successfully!');
+            
+            if (result.trim() === 'success') {
+                setIsModalOpen(false);
+                setIsSuccessModalOpen(true);
             } else {
-                alert('Error sending email.');
+                alert(`Error sending email: ${result}`);
             }
-
             closeModal(); // Close the modal
         } catch (error) {
             console.error('Error:', error);
@@ -85,11 +96,24 @@ function Pregnancy() {
     const closeModal = () => {
         setIsModalOpen(false);
     };
+    const closeSuccessModal = () => setIsSuccessModalOpen(false);
+    const openWhatsapp=()=>{
+        const url = 'https://wa.me/9150036318?text=Your%20Pregnancy%20Test%20Result!';
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
 
+
+    const openFacebook=()=>{
+        const url='https://www.facebook.com/';
+        window.open(url, '_blank', 'noopener,noreferrer');
+    }
     // Arrays for day, month, and year options
     const days = Array.from({ length: 31 }, (_, i) => i + 1);
-    const months = Array.from({ length: 12 }, (_, i) => i + 1);
-    const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i);
+    const months = [
+        "January", "February", "March", "April", "May", "June", 
+        "July", "August", "September", "October", "November", "December"
+    ];
+    const years = Array.from({ length: 3 }, (_, i) => new Date().getFullYear() - i);
 
     return (
         <>
@@ -115,13 +139,13 @@ function Pregnancy() {
                                 <div className="row my-3">
                                     <div className="col-md-3">
                                         <select value={day} className="date-label" name="day" onChange={(e) => setDay(e.target.value)} required>
-                                            <option value="">Day</option>
+                                            <option value="">Date</option>
                                             {days.map(d => <option key={d} value={d}>{d}</option>)}
                                         </select>
                                     </div>
                                     <div className="col-md-4">
                                         <select value={month} className="date-label" name="month" onChange={(e) => setMonth(e.target.value)} required>
-                                            <option value="">Month</option>
+                                              <option value="">Month</option>
                                             {months.map(m => <option key={m} value={m}>{m}</option>)}
                                         </select>
                                     </div>
@@ -150,12 +174,12 @@ function Pregnancy() {
                                                 </button>
                                             </li>
                                             <li style={{ margin: '0 10px' }}>
-                                                <button href="https://wa.me/9500672261?text=Your%20Pregnancy%20Test%20Result!">
+                                                <button onClick={openWhatsapp}>
                                                     <FaWhatsapp size={24} />
                                                 </button>
                                             </li>
                                             <li style={{ margin: '0 10px' }}>
-                                                <button href="https://facebook.com/">
+                                                <button onClick={openFacebook}>
                                                     <FaFacebook size={24} />
                                                 </button>
                                             </li>
@@ -168,6 +192,36 @@ function Pregnancy() {
                     </div>
                 </div>
             </section>
+
+            <style jsx>{`
+            @keyframes zoomInOut {
+                        0% {
+                            transform: scale(0.8);
+                            opacity: 0;
+                        }
+                        100% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                    }
+
+                    @keyframes zoomOut {
+                        0% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: scale(0.8);
+                            opacity: 0;
+                        }
+                    }
+
+                    .successModalContent {
+                        animation: zoomInOut 0.5s ease-out forwards;
+                    }
+            `}
+            
+            </style>
 
             <Modal
                 isOpen={isModalOpen}
@@ -210,6 +264,31 @@ function Pregnancy() {
                     <button type="submit" className="btn btn-primary mx-3">Send</button>
                     <button type="button" onClick={closeModal} className="btn btn-secondary">Close</button>
                 </form>
+            </Modal>
+
+            <Modal
+                isOpen={isSuccessModalOpen}
+                onRequestClose={closeSuccessModal}
+                contentLabel="Success Message"
+                ariaHideApp={false}
+                style={{
+                    content: {
+                        width: "350px",
+                        height: "250px",
+                        margin: "auto",
+                        padding: "20px",
+                        textAlign: "center",
+                    },
+                }}
+            >
+                <div className="successModalContent">
+                    <FaCheckCircle size={40} color="green" />
+                    <h2>Email Sent!</h2>
+                    <p>Your results have been sent successfully to your email.</p>
+                    <button onClick={closeSuccessModal} className="btn btn-primary mt-3">
+                        Close
+                    </button>
+                </div>
             </Modal>
         </>
     );
