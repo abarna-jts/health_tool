@@ -188,3 +188,49 @@
             padding: 20px 0px;
         }
   }
+
+  @media (max-width:1024px) and (min-width:768px){
+    .contact_field {
+        padding: 20px;
+    }
+    .contact_info_sec {
+        position: relative;
+        border-radius: 0px;
+        width: 100%;
+        height: 270px !important;
+    }
+    .contact_body .col-md-2{
+        width: 100% !important;
+    }
+    .right_conatct_social_icon ul {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+    .contact_us {
+        background-color: #f1f1f1;
+        padding: 20px 0px;
+    }
+    .contact_field h3 {
+        text-align: center;
+    }
+    .contact_field p {
+        text-align: center;
+    }
+    button.contact_form_submit {
+        width: 50%;
+        margin-left: 25%;
+    }
+    .contact_body .col-md-10 {
+        flex: 0 0 auto;
+        width: 92% !important;
+    }
+    .socil_item_inner {
+        padding-left: 0rem;
+        padding-bottom: 0px;
+    }
+    .contact_info_sec h4 {
+        letter-spacing: 1px;
+        padding-bottom: 0px;
+    }
+    
+  }
