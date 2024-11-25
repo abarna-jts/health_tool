@@ -378,12 +378,12 @@ function Diabetes() {
                                             ))
                                         )}
                                     </div>
-                                    {responses[questionIndex] !==null && (
+                                    {/* {responses[questionIndex] !==null && (
                                         <div className="selected-value-box">
                                             {responses[questionIndex]}
                                             
                                         </div>
-                                    )}
+                                    )} */}
                                 </div>
 
                             ))}

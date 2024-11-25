@@ -104,9 +104,10 @@ function IdealBodyWeight() {
                 <div className="container">
                     <div className="row justify-content-center">
                         <div className="col-md-7">
-                            <div className="box-calculation">
+                            <div className="box-calculation" style={{justifyContent:"center"}}>
+                                <div className="col-md-8">
                                 <form onSubmit={calculateIBW}>
-                                    <div className="col-md-12">
+                                    <div className="col-md-12 text-center">
                                         <label>Height (in cm)</label>
                                         <div className="form-group">
                                             <input
@@ -120,8 +121,13 @@ function IdealBodyWeight() {
                                             />
                                         </div>
                                     </div>
-                                    <button type="submit" className="btn btn-primary">Calculate IBW</button>
+                                    <div className="btn-center">
+                                        <button type="submit" className="btn btn-primary">Calculate IBW</button>
+                                    </div>
+                                    
                                 </form>
+                                </div>
+                                
                             </div>
 
                             {ibw && (

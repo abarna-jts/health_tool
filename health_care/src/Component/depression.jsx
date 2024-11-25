@@ -146,18 +146,21 @@ function Depression() {
                                         ))}
                                     </div>
                                     {/* Display the selected value outside the question box with a border */}
-                                    {responses[questionIndex] !== null && (
+                                    {/* {responses[questionIndex] !== null && (
                                         <div className="selected-value-box">
                                             {responses[questionIndex]}
                                         </div>
-                                    )}
+                                    )} */}
                                 </div>
                             ))}
                             {/* Display the total box only after all questions are answered */}
                             {allQuestionsAnswered && (
                                 <>
-                                    <div id="completion-status" className={`completion-status text-center mt-3 total-box`}>
-                                        <h5 style={{ color: "#16192c" }}>Ready by: {totalScore_depression}</h5>
+                                    <div id="completion-status" className={`completion-status text-center mt-3 total-box result-inner-box`}>
+                                        <div className="result-header text-center">
+                                            <h5 style={{ color: "#fff" }}>Ready by: {totalScore_depression}</h5>
+                                        </div>
+                                        
                                         <p>
                                             {totalScore_depression >= 20
                                                 ? "Your results indicate that you may be experiencing symptoms of severe depression. Based on your answers, these symptoms seem to be greatly interfering with your relationships and the tasks of everyday life. Visit your doctor for proper diagnosis."

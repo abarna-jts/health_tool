@@ -148,19 +148,22 @@ function Anxiety() {
                                         ))}
                                     </div>
                                     {/* Display the selected value outside the question box with a border */}
-                                    {responses[questionIndex] !== null && (
+                                    {/* {responses[questionIndex] !== null && (
                                         <div className="selected-value-box">
                                             {responses[questionIndex]}
                                         </div>
-                                    )}
+                                    )} */}
                                 </div>
                             ))}
                             {/* Display the total box only after all questions are answered */}
                             {allQuestionsAnswered && (
                                 <>
-                                    <div id="completion-status" className={`completion-status text-center mt-3 total-box`}>
-                                        <h5 style={{ color: "#16192c" }}>Ready by: {totalScore}</h5>
-                                        <p>
+                                    <div id="completion-status" className={`completion-status text-center mt-3 total-box result-inner-box text-center`}>
+                                        <div className="result-header">
+                                            <h5 style={{ color: "#fff" }}>Ready by: {totalScore}</h5>
+                                        </div>
+                                        
+                                        <p style={{padding:"10px",marginBottom:"0rem"}}>
                                             {totalScore >= 13
                                                 ? "You have severe anxiety. Please check with your doctor to get the help you need."
                                                 : totalScore >= 10

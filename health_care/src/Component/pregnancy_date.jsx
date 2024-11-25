@@ -156,10 +156,12 @@ function Pregnancy() {
                                         </select>
                                     </div>
                                 </div>
+                                <div className="btn-center">
+                                    <button onClick={calculateDueDate} className="btn btn-primary">
+                                        Calculate Due Date
+                                    </button>
+                                </div>
                                 
-                                <button onClick={calculateDueDate} className="btn btn-primary">
-                                    Calculate Due Date
-                                </button>
 
                                 {dueDate && (
                                     <>

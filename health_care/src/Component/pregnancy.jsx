@@ -172,18 +172,56 @@ function Pregnancy() {
                                             </select>
                                         </div>
                                     </div>
+                                    <div className="btn-center">
+                                        <button onClick={calculateDates} className="btn btn-primary">
+                                            Calculate
+                                        </button>
+                                    </div>
                                     
-                                    <button onClick={calculateDates} className="btn btn-primary">
-                                        Calculate
-                                    </button>
 
-                                    {result && (
+                                    
+                                </div>
+                                
+                            </div>
+                            {result && (
                                         <>
-                                            <div style={{ marginTop: '20px', fontWeight: 'bold' }}>
-                                                <p>Ovulation Day: {result.ovulationDate}</p>
-                                                <p>Fertile Window: {result.fertileStartDate} to {result.fertileEndDate}</p>
-                                                <p>Pregnancy Due Date: {result.dueDate}</p>
+                                        <div className="row pregnancy-row">
+                                        <div className="col-md-4">
+                                                <div className="result-inner-box text-center" style={{ marginTop: '20px', fontWeight: 'bold' }}>
+                                                    <div className="result-header">
+                                                        <p>Ovulation Day </p>
+                                                    </div>
+                                                    <div className="score-box">
+                                                        <p>{result.ovulationDate}</p>
+                                                    </div>
+                                                </div>
                                             </div>
+                                            
+                                            <div className="col-md-4">
+                                                <div className="result-inner-box text-center" style={{ marginTop: '20px', fontWeight: 'bold' }}>
+                                                    <div className="result-header">
+                                                        <p>Fertile Window </p>
+                                                    </div>
+                                                    <div className="score-box">
+                                                        <p>{result.fertileStartDate} to {result.fertileEndDate}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="col-md-4">
+                                                <div className="result-inner-box text-center" style={{ marginTop: '20px', fontWeight: 'bold' }}>
+                                                    <div className="result-header">
+                                                        <p>Pregnancy Due Date</p>
+                                                    </div>
+                                                    <div className="score-box">
+                                                        <p>{result.dueDate}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                            
+                                            
+                                            
                                             <div className="social-container" style={{ marginTop: '20px' }}>
                                             <h5><strong>Share your Score</strong></h5>
                                                 <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
@@ -206,8 +244,6 @@ function Pregnancy() {
                                             </div>
                                         </>
                                     )}
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

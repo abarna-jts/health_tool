@@ -195,7 +195,7 @@ function Asthuma() {
         };
 
         try {
-            const response = await fetch('http://localhost/React%20js/backend-gmail/anxiety-mail.php', {
+            const response = await fetch('https://health-tool.jorim.net/backend-gmail/anxiety-mail.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
@@ -237,7 +237,7 @@ function Asthuma() {
 
 
 
-                    <div className="cards-list">
+                    <div className="cards-list asthuma-card">
                         <div
                             className={`card ${selectedCard === "card1" ? "clicked" : ""}`}
                             onClick={handleButton1Click}

@@ -68,19 +68,19 @@ function Pilgrims() {
             alert("Please provide your name and email.");
             return;
         }
-        
-        const data = { 
-            email, name, 
+
+        const data = {
+            email, name,
             completionPercentage,
         };
-    
+
         try {
             const response = await fetch('https://health-tool.jorim.net/backend-gmail/anxiety-mail.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
             });
-    
+
             const resultText = await response.text();
             if (resultText.trim() === 'success') {
                 setIsModalOpen(false);
@@ -94,13 +94,13 @@ function Pilgrims() {
         }
     };
 
-    const openWhatsapp=()=>{
+    const openWhatsapp = () => {
         const url = 'https://wa.me/9150036318?text=Your%20Pregnancy%20Test%20Result!';
         window.open(url, '_blank', 'noopener,noreferrer');
     }
 
-    const openFacebook=()=>{
-        const url='https://www.facebook.com/';
+    const openFacebook = () => {
+        const url = 'https://www.facebook.com/';
         window.open(url, '_blank', 'noopener,noreferrer');
     }
 
@@ -113,10 +113,10 @@ function Pilgrims() {
                             <div className="title text-center">
                                 <div className="nd-title">Checklist Of Pilgrims’ Health Preparations</div>
                             </div>
-                             <div className="para-desc text-justify">
-                                    <p>Here is a checklist of the basic health needs of pilgrims. Make sure of your level of readiness by selecting the points that you have completed and check them all ahead of your journey to ensure a healthy and safe journey.</p>
-                                </div>
-                                <h6>Answer All the Question, then get the score</h6>
+                            <div className="para-desc text-justify">
+                                <p>Here is a checklist of the basic health needs of pilgrims. Make sure of your level of readiness by selecting the points that you have completed and check them all ahead of your journey to ensure a healthy and safe journey.</p>
+                            </div>
+                            <h6>Answer All the Question, then get the score</h6>
                         </div>
                     </div>
                 </div>
@@ -148,7 +148,7 @@ function Pilgrims() {
                             {/* Question 2 */}
                             <div className="first-question 2">
                                 <h5>2. Is your bag Packed?</h5>
-                                {[ 
+                                {[
                                     "Light-colored sun umbrella",
                                     "Masks",
                                     "You have prepared enough clothes to change regularly",
@@ -174,7 +174,7 @@ function Pilgrims() {
                                             /> {item}
                                         </label><br />
                                     </>
-                                    
+
                                 ))}
                             </div>
 
@@ -243,30 +243,33 @@ function Pilgrims() {
                             </div>
 
                             {/* Completion Status */}
-                            <div ref={completionStatusRef} className="completion-status text-justify mt-3 total-box mb-3">
-                                <div className="percentage mt-4">
-                                    <h5>Ready By: {completionPercentage}%</h5>
+                            <div ref={completionStatusRef} className="result-inner-box text-center completion-status text-justify mt-3 total-box mb-3">
+                                <div className="result-header">
+                                    <p>Ready By: {completionPercentage}%</p>
                                 </div>
+                                {/* <div className="percentage mt-4">
+                                    <h5>Ready By: {completionPercentage}%</h5>
+                                </div> */}
                                 <div className="social-container" style={{ marginTop: '20px' }}>
                                     <h5><strong>Share your Score</strong></h5>
-                                        <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
-                                            <li style={{ margin: '0 10px' }}>
-                                                <button onClick={openModal}>
-                                                    <SiGmail size={24} />
-                                                </button>
-                                            </li>
-                                            <li style={{ margin: '0 10px' }}>
-                                                <button onClick={openWhatsapp}>
-                                                    <FaWhatsapp size={24} />
-                                                </button>
-                                            </li>
-                                            <li style={{ margin: '0 10px' }}>
-                                                <button onClick={openFacebook}>
-                                                    <FaFacebook size={24} />
-                                                </button>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
+                                        <li style={{ margin: '0 10px' }}>
+                                            <button onClick={openModal}>
+                                                <SiGmail size={24} />
+                                            </button>
+                                        </li>
+                                        <li style={{ margin: '0 10px' }}>
+                                            <button onClick={openWhatsapp}>
+                                                <FaWhatsapp size={24} />
+                                            </button>
+                                        </li>
+                                        <li style={{ margin: '0 10px' }}>
+                                            <button onClick={openFacebook}>
+                                                <FaFacebook size={24} />
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
 
                         </div>
@@ -301,7 +304,7 @@ function Pilgrims() {
                         animation: zoomInOut 0.5s ease-out forwards;
                     }
             `}
-            
+
             </style>
 
             <Modal

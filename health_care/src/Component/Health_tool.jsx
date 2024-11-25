@@ -13,10 +13,21 @@ import nomophobia from '../assets/img/NMPQ ICON.svg'
 import diabetes from '../assets/img/Prediabetes-Risk-Test.svg'
 import pregnancy_due from '../assets/img/PregnancyDueDate.svg'
 import visual from '../assets/img/VisualAcuityTest.svg'
+import heart_rate from '../assets/img/heart_rate.png'
 
 function Health_tool() {
     return (
         <>
+            <div className="container">
+                <div className="row justify-content-center">
+                    <div className="col-md-7">
+                        <div className="title-card text-center">
+                            <h3>Health Test Tool</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
             {/* <h2>This is health tool</h2> */}
             <div class="cards-list">
                 
@@ -25,9 +36,13 @@ function Health_tool() {
                         <div class="card_image">
                             <img src={asthuma_icon} className="img-fluid" />
                         </div>
-                        <div class="card_title">
+                        <div class="card_title card-adjust">
                             <p>Asthma Control Test</p>
                         </div>
+                        <div className="btn-center">
+                            <button className='card-btn' type='button'>Start Test</button>
+                        </div>
+                        
                     </Link>
                 </div>
 
@@ -39,6 +54,9 @@ function Health_tool() {
                     <div class="card_title">
                         <p>Body Mass Index (BMI) Calculator</p>
                     </div>
+                    <div className="btn-center">
+                            <button className='card-btn' type='button'>Start Test</button>
+                        </div>
                     </Link>
                 </div>
 
@@ -47,9 +65,12 @@ function Health_tool() {
                     <div class="card_image">
                         <img src={Calories} />
                     </div>
-                    <div class="card_title title-black">
+                    <div class="card_title title-black card-adjust">
                         <p>Calorie Calculate</p>
                     </div>
+                    <div className="btn-center">
+                            <button className='card-btn' type='button'>Start Test</button>
+                        </div>
                     </Link>
                 </div>
                 <div class="card 4">
@@ -59,6 +80,9 @@ function Health_tool() {
                         </div>
                         <div class="card_title">
                             <p>Checklist Of Pilgrims’ Health Preparations</p>
+                        </div>
+                        <div className="btn-center">
+                            <button className='card-btn' type='button'>Start Test</button>
                         </div>
                     </Link>
                     
@@ -76,6 +100,9 @@ function Health_tool() {
                     <div class="card_title">
                         <p>Best Time To Get Pregnant</p>
                     </div>
+                    <div className="btn-center">
+                            <button className='card-btn' type='button'>Start Test</button>
+                        </div>
                     </Link>
                 </div>
                 <div class="card 2">
@@ -86,6 +113,9 @@ function Health_tool() {
                         <div class="card_title">
                             <p>Do you suffer from anxiety?</p>
                         </div>
+                        <div className="btn-center">
+                            <button className='card-btn' type='button'>Start Test</button>
+                        </div>
                     </Link>
                     
                 </div>
@@ -95,8 +125,11 @@ function Health_tool() {
                         <div class="card_image">
                             <img src={Eating_Disorder} />
                         </div>
-                        <div class="card_title">
+                        <div class="card_title card-adjust">
                             <p>Eating Disorder Test</p>
+                        </div>
+                        <div className="btn-center">
+                            <button className='card-btn' type='button'>Start Test</button>
                         </div>
                     </Link>
                     
@@ -109,6 +142,9 @@ function Health_tool() {
                         </div>
                         <div class="card_title title-black">
                             <p>Find out if you have a Sleep disorder?</p>
+                        </div>
+                        <div className="btn-center">
+                            <button className='card-btn' type='button'>Start Test</button>
                         </div>
                     </Link>
                     
@@ -126,6 +162,9 @@ function Health_tool() {
                     <div class="card_title">
                         <p>Find out if you have depression</p>
                     </div>
+                    <div className="btn-center">
+                            <button className='card-btn' type='button'>Start Test</button>
+                        </div>
                     </Link>
                 </div>
                 <div class="card 2">
@@ -136,6 +175,9 @@ function Health_tool() {
                         <div class="card_title">
                             <p>Ideal Body Weight (IBW) Calculator</p>
                         </div>
+                        <div className="btn-center">
+                            <button className='card-btn' type='button'>Start Test</button>
+                        </div>
                     </Link>
                     
                 </div>
@@ -145,8 +187,11 @@ function Health_tool() {
                         <div class="card_image">
                             <img src={nomophobia} />
                         </div>
-                        <div class="card_title">
+                        <div class="card_title card-adjust">
                             <p>Nomophobia</p>
+                        </div>
+                        <div className="btn-center">
+                            <button className='card-btn' type='button'>Start Test</button>
                         </div>
                     </Link>
                     
@@ -157,8 +202,11 @@ function Health_tool() {
                         <div class="card_image">
                             <img src={diabetes} />
                         </div>
-                        <div class="card_title title-black">
+                        <div class="card_title title-black card-adjust">
                             <p>Prediabetes Risk Test</p>
+                        </div>
+                        <div className="btn-center">
+                            <button className='card-btn' type='button'>Start Test</button>
                         </div>
                     </Link>
                     
@@ -176,6 +224,9 @@ function Health_tool() {
                     <div class="card_title">
                         <p>Pregnancy Due Date Calculator</p>
                     </div>
+                    <div className="btn-center">
+                            <button className='card-btn' type='button'>Start Test</button>
+                        </div>
                     </Link>
                 </div>
                 <div class="card 2">
@@ -183,8 +234,26 @@ function Health_tool() {
                         <div class="card_image">
                             <img src={visual} className="img-fluid" />
                         </div>
-                        <div class="card_title">
+                        <div class="card_title card-adjust">
                             <p>Visual Acuity Test</p>
+                        </div>
+                        <div className="btn-center">
+                            <button className='card-btn' type='button'>Start Test</button>
+                        </div>
+                    </Link>
+                    
+                </div>
+
+                <div class="card 3">
+                    <Link to="/heart_rate">
+                        <div class="card_image">
+                            <img src={heart_rate} className="img-fluid" />
+                        </div>
+                        <div class="card_title card-adjust">
+                            <p>Target Heart Rate</p>
+                        </div>
+                        <div className="btn-center">
+                            <button className='card-btn' type='button'>Start Test</button>
                         </div>
                     </Link>
                     

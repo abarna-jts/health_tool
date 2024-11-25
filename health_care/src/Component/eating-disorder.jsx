@@ -26,7 +26,7 @@ function EatingDisorder() {
     ];
 
     const options1 = [
-        { label: "Always", value: 4 , emoji: "😁"},
+        { label: "Always", value: 4, emoji: "😁" },
         { label: "Frequently", value: 3, emoji: "😊" },
         { label: "Sometimes", value: 2, emoji: "🙂" },
         { label: "Occasionally", value: 1, emoji: "😟" },
@@ -43,9 +43,9 @@ function EatingDisorder() {
         { label: "False", value: 0, emoji: "😢" },
     ];
 
-    const options4=[
-        {label: "True", value:1, emoji:"😊"},
-        {label: "A little", value:0, emoji:"😢"},
+    const options4 = [
+        { label: "True", value: 1, emoji: "😊" },
+        { label: "A little", value: 0, emoji: "😢" },
     ];
 
 
@@ -74,13 +74,13 @@ function EatingDisorder() {
     const getOptionsForQuestion = (questionIndex) => {
         if (questionIndex === 0 || questionIndex === 11) {
             return options2; // First and last questions use options2
-        } else if (questionIndex === 2 || questionIndex === 3 || questionIndex === 8 || questionIndex ===6) {
+        } else if (questionIndex === 2 || questionIndex === 3 || questionIndex === 8 || questionIndex === 6) {
             return options1; // Specific questions use options1
         } else if (questionIndex === 9) {
             return options3;
-        } else if (questionIndex === 5){
+        } else if (questionIndex === 5) {
             return options4;
-        }else {
+        } else {
             return options2;
         }
     };
@@ -91,20 +91,20 @@ function EatingDisorder() {
             alert("Please provide your name and email.");
             return;
         }
-        
-        const data = { 
-            email, name, 
+
+        const data = {
+            email, name,
             totalScore_eating,
             responses,
         };
-    
+
         try {
             const response = await fetch('https://health-tool.jorim.net/backend-gmail/anxiety-mail.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
             });
-    
+
             const resultText = await response.text();
             if (resultText.trim() === 'success') {
                 setIsModalOpen(false);
@@ -118,13 +118,13 @@ function EatingDisorder() {
         }
     };
 
-    const openWhatsapp=()=>{
+    const openWhatsapp = () => {
         const url = 'https://wa.me/9150036318?text=Your%20Pregnancy%20Test%20Result!';
         window.open(url, '_blank', 'noopener,noreferrer');
     }
 
-    const openFacebook=()=>{
-        const url='https://www.facebook.com/';
+    const openFacebook = () => {
+        const url = 'https://www.facebook.com/';
         window.open(url, '_blank', 'noopener,noreferrer');
     }
 
@@ -156,69 +156,72 @@ function EatingDisorder() {
                                     {getOptionsForQuestion(questionIndex).map((option, optionIndex) => (
                                         <div key={optionIndex} className="col-6">
                                             <label
-                                                    className={`radio-label ${responses[questionIndex] === option.value ? "selected" : ""}`}
-                                                >
-                                                    <span className="emoji">
-                                                        {responses[questionIndex] === option.value ? option.emoji : "🔘"}
-                                                    </span>
-                                                    {option.label}
-                                                    <input
-                                                        type="radio"
-                                                        name={`question-${questionIndex}`}
-                                                        className="radio-input"
-                                                        value={option.value}
-                                                        onChange={() => handleOptionChange(questionIndex, option.value)}
-                                                        checked={responses[questionIndex] === option.value}
-                                                    />
+                                                className={`radio-label ${responses[questionIndex] === option.value ? "selected" : ""}`}
+                                            >
+                                                <span className="emoji">
+                                                    {responses[questionIndex] === option.value ? option.emoji : "🔘"}
+                                                </span>
+                                                {option.label}
+                                                <input
+                                                    type="radio"
+                                                    name={`question-${questionIndex}`}
+                                                    className="radio-input"
+                                                    value={option.value}
+                                                    onChange={() => handleOptionChange(questionIndex, option.value)}
+                                                    checked={responses[questionIndex] === option.value}
+                                                />
                                             </label>
                                         </div>
                                     ))}
                                 </div>
                                 {/* Display selected value for this question */}
-                                {responses[questionIndex] !== null && (
+                                {/* {responses[questionIndex] !== null && (
                                     <div className="selected-value-box mt-2">
                                         {responses[questionIndex]}
                                     </div>
-                                )}
+                                )} */}
                             </div>
                         ))}
                         {/* Display the total box only after all questions are answered */}
                         {allQuestionsAnswered && (
                             <>
-                            <div id="completion-status" className={`completion-status text-center mt-3 total-box`}>
-                                <h5 style={{ color: "#16192c" }}>Total Score: {totalScore_eating}</h5>
-                                <p style={{ marginBottom: "0.5rem" }}><strong>
-                                    {totalScore_eating >= 13 ? "High Risk" : "Minimal Risk"
-                                    }</strong></p>
-                                <p>
-                                    {totalScore_eating >= 13
-                                        ? "Your results indicate that you are at high risk of having an eating disorder, we suggest you speak with a doctor."
-                                        : "Your results indicate that you are at low risk of having an eating disorder. If you notice that your symptoms aren't improving, you may want to bring them up with a doctor."
-                                    }
-                                </p>
-                            </div>
-                            <div className="social-container" style={{ marginTop: '20px' }}>
-                            <h5><strong>Share your Score</strong></h5>
-                                <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
-                                    <li style={{ margin: '0 10px' }}>
-                                        <button onClick={openModal}>
-                                            <SiGmail size={24} />
-                                        </button>
-                                    </li>
-                                    <li style={{ margin: '0 10px' }}>
-                                        <button onClick={openWhatsapp}>
-                                            <FaWhatsapp size={24} />
-                                        </button>
-                                    </li>
-                                    <li style={{ margin: '0 10px' }}>
-                                        <button onClick={openFacebook}>
-                                            <FaFacebook size={24} />
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
+                                <div id="completion-status" className={`completion-status text-center mt-3 total-box result-inner-box text-center`}>
+                                    <div className="result-header">
+                                        <h5 style={{ color: "#fff" }}>Total Score: {totalScore_eating}</h5>
+                                    </div>
+                                    
+                                    <p style={{ marginBottom: "0.5rem", marginTop:"0.5rem", color:"#457d99" }}><strong>
+                                        {totalScore_eating >= 13 ? "High Risk" : "Minimal Risk"
+                                        }</strong></p>
+                                    <p>
+                                        {totalScore_eating >= 13
+                                            ? "Your results indicate that you are at high risk of having an eating disorder, we suggest you speak with a doctor."
+                                            : "Your results indicate that you are at low risk of having an eating disorder. If you notice that your symptoms aren't improving, you may want to bring them up with a doctor."
+                                        }
+                                    </p>
+                                </div>
+                                <div className="social-container" style={{ marginTop: '20px' }}>
+                                    <h5><strong>Share your Score</strong></h5>
+                                    <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
+                                        <li style={{ margin: '0 10px' }}>
+                                            <button onClick={openModal}>
+                                                <SiGmail size={24} />
+                                            </button>
+                                        </li>
+                                        <li style={{ margin: '0 10px' }}>
+                                            <button onClick={openWhatsapp}>
+                                                <FaWhatsapp size={24} />
+                                            </button>
+                                        </li>
+                                        <li style={{ margin: '0 10px' }}>
+                                            <button onClick={openFacebook}>
+                                                <FaFacebook size={24} />
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
                             </>
-                            
+
                         )}
                     </div>
                 </div >

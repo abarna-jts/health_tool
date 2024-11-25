@@ -159,7 +159,7 @@ function BMI_Calculation() {
                        
                     </div>
 
-                    <div className="cards-list">
+                    <div className="cards-list bmi_card">
                     <div 
                             className={`card ${selectedCard === "card1" ? "clicked" : ""}`}
                             onClick={handleButton1Click}
@@ -243,7 +243,9 @@ function BMI_Calculation() {
                                                             </div>
                                                         </div>
 
-                                                        <button type="submit" className="btn btn-primary">Calculate BMI</button>
+                                                        <div className="btn-center">
+                                                            <button type="submit" className="btn btn-primary">Calculate BMI</button>
+                                                        </div>
 
                                                     </form>
                                                 </div>
@@ -358,8 +360,11 @@ function BMI_Calculation() {
                                                                 />
                                                             </div>
                                                         </div>
+                                                        <div className="btn-center">
+                                                            <button type="submit" className="btn btn-primary">Calculate BMI</button>
+                                                        </div>
 
-                                                        <button type="submit" className="btn btn-primary">Calculate BMI</button>
+                                                        
 
                                                     </form>
                                                 </div>

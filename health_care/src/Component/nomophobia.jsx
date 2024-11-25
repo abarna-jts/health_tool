@@ -172,11 +172,11 @@ function Nomophobia(){
                                         </div>
                                     ))}
                                 </div>
-                                {responses[questionIndex] !== null && (
+                                {/* {responses[questionIndex] !== null && (
                                     <div className="selected-value-box mt-2 p-2 border rounded">
                                         {responses[questionIndex]}
                                     </div>
-                                )}
+                                )} */}
                             </div>
                             ))}
                             {/* Display the total box only after all questions are answered */}

@@ -16,6 +16,7 @@ import due_pregnancy from '../assets/img/sidebar-12.png';
 import visual from '../assets/img/sidebar-13.png';
 import pilgrims from '../assets/img/sidebar-14.png';
 import asthumaActive from '../assets/img/sidebar-arrow.png';
+import heart_rate from '../assets/img/sidebar-15.png';
 
 function Sidebar() {
     return (
@@ -122,6 +123,13 @@ function Sidebar() {
                         <NavLink to="/diabetes" className={({ isActive }) => (isActive ? 'active-link' : '')}>
                             {({ isActive }) => (<>
                                 <img src={isActive ? asthumaActive : diabetes} alt="" className="icon-image"/>Prediabetes Risk Test
+                            </>)}
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/heart_rate" className={({ isActive }) => (isActive ? 'active-link' : '')}>
+                            {({ isActive }) => (<>
+                                <img src={isActive ? asthumaActive : heart_rate} alt="" className="icon-image"/>Target Heart Rate
                             </>)}
                         </NavLink>
                     </li>

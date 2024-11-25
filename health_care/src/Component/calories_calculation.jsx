@@ -1,4 +1,4 @@
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import weight_icon from '../assets/img/weight_icon.png';
@@ -53,7 +53,7 @@ const CalorieCalculator = () => {
             alert("Please enter valid values for all fields.");
             return;
         }
-        
+
         const heightInMeters = heightNum / 100; // Convert height from cm to meters
 
         // Calculate BMI
@@ -114,7 +114,7 @@ const CalorieCalculator = () => {
         } else {
             setCaloriesAdjustment("You are already at your ideal calorie intake.");
         }
-        
+
     };
 
     const sendResultsToEmail = async (e) => {
@@ -123,12 +123,12 @@ const CalorieCalculator = () => {
             alert("Please provide your name and email.");
             return;
         }
-        
-        const data = { 
-            email, name, 
-            bmi, calories, 
-            caloriesForIdealWeight, 
-            idealWeight, 
+
+        const data = {
+            email, name,
+            bmi, calories,
+            caloriesForIdealWeight,
+            idealWeight,
             caloriesAdjustment,
             weight,
             heightCm,
@@ -136,14 +136,14 @@ const CalorieCalculator = () => {
             gender,
             activityLevel,
         };
-    
+
         try {
             const response = await fetch('https://health-tool.jorim.net/backend-gmail/weight-mail.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
             });
-    
+
             const resultText = await response.text();
             if (resultText.trim() === 'success') {
                 setIsModalOpen(false);
@@ -156,7 +156,7 @@ const CalorieCalculator = () => {
             alert('An error occurred while sending the email.');
         }
     };
-    
+
     useEffect(() => {
         if (bmi) {
             const completionElement = document.getElementById("completion-status");
@@ -166,13 +166,13 @@ const CalorieCalculator = () => {
         }
     }, [bmi]);
 
-    const openWhatsapp=()=>{
+    const openWhatsapp = () => {
         const url = 'https://wa.me/9150036318?text=Your%20Pregnancy%20Test%20Result!';
         window.open(url, '_blank', 'noopener,noreferrer');
     }
 
-    const openFacebook=()=>{
-        const url='https://www.facebook.com/';
+    const openFacebook = () => {
+        const url = 'https://www.facebook.com/';
         window.open(url, '_blank', 'noopener,noreferrer');
     }
 
@@ -191,11 +191,11 @@ const CalorieCalculator = () => {
                                 <div className="nd-title">Calories Calculate</div>
                             </div>
                             <div className="para-desc text-justify">
-                                    <p><strong>Overview:</strong> Is a calculation based on the number of calories consumed / male (female / female) on several factors such as weight, height, age, and type of daily physical activity.</p>
+                                <p><strong>Overview:</strong> Is a calculation based on the number of calories consumed / male (female / female) on several factors such as weight, height, age, and type of daily physical activity.</p>
                             </div>
                         </div>
-                        
-                        
+
+
 
                     </div>
                 </div>
@@ -290,35 +290,37 @@ const CalorieCalculator = () => {
                                             </select>
                                         </div>
                                     </div>
+                                    <div className="btn-center">
+                                        <button type="submit" className="btn btn-primary">Calculate BMI & Calories</button>
+                                    </div>
 
-                                    <button type="submit" className="btn btn-primary">Calculate BMI & Calories</button>
                                     <div className="result">
-                                    {calories &&
-                                    <>
-                                    <h5 className="text-center pt-2 pb-2" style={{color:"#0d8c60"}}><strong>Result: You consume at a rate {calories} calories a day</strong></h5>
-                                        <div className="social-container" style={{ marginTop: '20px' }}>
-                                                <h5><strong>Share your Score</strong></h5>
-                                                <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
-                                                    <li style={{ margin: '0 10px' }}>
-                                                        <button onClick={openModal}>
-                                                            <SiGmail size={24} />
-                                                        </button>
-                                                    </li>
-                                                    <li style={{ margin: '0 10px' }}>
-                                                        <button onClick={openWhatsapp} target="_blank" rel="noopener noreferrer">
-                                                            <FaWhatsapp size={24} />
-                                                        </button>
-                                                    </li>
-                                                    <li style={{ margin: '0 10px' }}>
-                                                        <button onClick={openFacebook} target="_blank" rel="noopener noreferrer">
-                                                            <FaFacebook size={24} />
-                                                        </button>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                    </>
-                                        
-                                    }
+                                        {calories &&
+                                            <>
+                                                <h5 className="text-center pt-2 pb-2" style={{ color: "#0d8c60" }}><strong>Result: You consume at a rate {calories} calories a day</strong></h5>
+                                                <div className="social-container">
+                                                    <h5><strong>Share your Score</strong></h5>
+                                                    <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
+                                                        <li style={{ margin: '0 10px' }}>
+                                                            <button onClick={openModal}>
+                                                                <SiGmail size={24} />
+                                                            </button>
+                                                        </li>
+                                                        <li style={{ margin: '0 10px' }}>
+                                                            <button onClick={openWhatsapp} target="_blank" rel="noopener noreferrer">
+                                                                <FaWhatsapp size={24} />
+                                                            </button>
+                                                        </li>
+                                                        <li style={{ margin: '0 10px' }}>
+                                                            <button onClick={openFacebook} target="_blank" rel="noopener noreferrer">
+                                                                <FaFacebook size={24} />
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </>
+
+                                        }
                                     </div>
 
                                 </form>
@@ -328,13 +330,28 @@ const CalorieCalculator = () => {
                         <div className="row d-flex pt-3 justify-content-center">
                             {bmi &&
                                 <>
-                                    <div className="total-box calories " id='completion-status'>
-                                        <img src={weight_icon} alt="" className='icon'/>
+                                    {/* <div className="total-box calories " id='completion-status'>
+                                        <img src={weight_icon} alt="" className='icon' />
                                         <div className="result-text">
                                             <h6>BMI:{bmi}</h6>
                                             <h6> ({bmiCategory})</h6>
                                         </div>
-                                        
+
+                                    </div> */}
+
+                                    <div className="result-inner-box text-center total-box calories" id='completion-status'>
+                                        <div className="result-header">
+                                            <h6>BMI:{bmi}</h6>
+                                        </div>
+                                        <div className="score-box">
+                                            
+                                            <div className="score">
+                                                <img src={weight_icon} alt="" className='icon' />
+                                                <h6> ({bmiCategory})</h6>
+                                            </div>
+
+                                        </div>
+
                                     </div>
 
                                 </>
@@ -343,53 +360,65 @@ const CalorieCalculator = () => {
                             {calories &&
                                 <>
                                     {/* <div className="col-md-3"> */}
-                                        <div className="total-box calories">
-                                            <img src={calories_icon} alt="" />
-                                            <div className="result-text">
-                                                <h6>Your Daily Calorie Requirement:{calories} kcal</h6>
-                                            </div>
-                                            
-
+                                    <div className="result-inner-box text-center total-box calories" style={{justifyContent:"space-around"}}>
+                                        <div className="result-header">
+                                            <h6>Current Calories </h6>
                                         </div>
+                                        <img src={calories_icon} alt="" />
+                                        <div className="result-text">
+                                            <h6>Your Daily Calorie Requirement:{calories} kcal</h6>
+                                        </div>
+
+
+                                    </div>
                                     {/* </div> */}
                                 </>
                             }
                             {idealWeight &&
                                 <>
                                     {/* <div className="col-md-3"> */}
-                                        <div className="total-box calories">
-                                            <img src={ideal_weight} alt="" />
-                                            <div className="result-text">
-                                                <h6>Your Ideal Weight: {idealWeight} kg</h6>
-                                            </div>
-                                            
+                                    <div className="result-inner-box text-center total-box calories">
+                                        <div className="result-header">
+                                            <h6>Ideal Weight (Kg)</h6>
                                         </div>
+                                        <img src={ideal_weight} alt="" />
+                                        <div className="result-text">
+                                            <h6>Your Ideal Weight: {idealWeight} kg</h6>
+                                        </div>
+
+                                    </div>
                                     {/* </div> */}
                                 </>
                             }
                             {caloriesForIdealWeight &&
                                 <>
                                     {/* <div className="col-md-3"> */}
-                                        <div className="total-box calories ">
-                                            <img src={suggested_calories} alt="" />
-                                            <div className="result-text">
-                                                <h6>Calories for Ideal Weight: {caloriesForIdealWeight} kcal</h6>
-                                            </div>
-                                            
+                                    <div className="result-inner-box text-center total-box calories ">
+                                        <div className="result-header">
+                                            <h6>Calories for ideal weight</h6>
                                         </div>
+                                        <img src={suggested_calories} alt="" />
+                                        <div className="result-text">
+                                            <h6>Calories for Ideal Weight: {caloriesForIdealWeight} kcal</h6>
+                                        </div>
+
+                                    </div>
                                     {/* </div> */}
                                 </>
                             }
                             {caloriesAdjustment &&
                                 <>
                                     {/* <div className="col-md-3"> */}
-                                        <div className="total-box calories">
-                                            <img src={reduce_cal} alt="" />
-                                            <div className="result-text">
-                                                <h6>{caloriesAdjustment}</h6>
-                                            </div>
-                                            
+                                    <div className="result-inner-box text-center total-box calories">
+                                        <div className="result-header">
+                                            <h6>Calories Adjustment</h6>
                                         </div>
+                                        <img src={reduce_cal} alt="" />
+                                        <div className="result-text">
+                                            <h6>{caloriesAdjustment}</h6>
+                                        </div>
+
+                                    </div>
                                     {/* </div> */}
                                 </>
                             }
@@ -427,7 +456,7 @@ const CalorieCalculator = () => {
                         animation: zoomInOut 0.5s ease-out forwards;
                     }
             `}
-            
+
             </style>
 
 
