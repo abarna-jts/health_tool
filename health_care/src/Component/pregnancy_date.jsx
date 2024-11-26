@@ -163,12 +163,15 @@ function Pregnancy() {
                                 </div>
                                 
 
-                                {dueDate && (
+                                
+                            </div>
+                            {dueDate && (
                                     <>
-                                    <div style={{ marginTop: '20px', fontWeight: 'bold' }}>
-                                        <p>Pregnancy Due Date: {dueDate}</p>
-                                    </div>
-                                    <div className="social-container" style={{ marginTop: '20px' }}>
+                                    <div className="result-inner-box" style={{ marginTop: '20px', fontWeight: 'bold' }}>
+                                        <div className="result-header text-center">
+                                            <p>Pregnancy Due Date: {dueDate}</p>
+                                        </div>
+                                        <div className="social-container" style={{ marginTop: '20px' }}>
                                         <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>
                                             <li style={{ margin: '0 10px' }}>
                                                 <button onClick={openModal}>
@@ -187,9 +190,11 @@ function Pregnancy() {
                                             </li>
                                         </ul>
                                     </div>
+                                        
+                                    </div>
+                                    
                                     </>
                                 )}
-                            </div>
                         </div>
                     </div>
                 </div>

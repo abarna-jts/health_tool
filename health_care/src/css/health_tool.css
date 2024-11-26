@@ -9,13 +9,13 @@
     display: inline-block;
     text-decoration: none;
   }
-
+/* 
   .container {
     margin-top: 5em;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
     gap: 2rem;
-  }
+  } */
 
   .card:nth-child(1) .box .icon .iconBox {
     background: #d3b19a;
@@ -69,8 +69,8 @@
 
   .icon {
     position: absolute;
-    bottom: -0.375rem;
-    right: -0.375rem;
+    /* bottom: -0.375rem;
+    right: -0.375rem; */
     width: 6rem;
     height: 6rem;
     background: var(--clr);
@@ -114,4 +114,176 @@
     justify-content: center;
     align-items: center;
     transition: 0.3s;
+  }
+
+
+
+  /* health_tool_card */
+  .prd-card{
+    margin-top: 3em;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 2rem;
+  }
+  .prd-card .card
+  {
+    position: relative;
+    width: 250px;
+    height: 185px;
+    /*height: 450px;*/
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    transition: 0.5s;
+  }
+  
+  /* .prd-card .card:hover
+  {
+    height: 215px;
+  } */
+ 
+  .prd-card .imgBx
+  {
+    position: absolute;
+    left: 50%;
+    top: -50px;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 120px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 1px 18px rgb(0 0 0 / 28%);
+    overflow: hidden;
+    transition: 0.5s;
+  }
+  
+  .prd-card .card:hover .imgBx
+  {
+    width: 130px;
+    height: 120px;
+    top:-65px;
+  }
+  
+  .prd-card .imgBx img
+  {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    
+  }
+  
+  .prd-card .card .content
+  {
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   display: flex;
+   justify-content: center;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+  
+  .prd-card .card .content .details
+  {
+    padding: 15px;
+    text-align: center;
+    width: 100%;
+    transition: 0.5s;
+    /* transform: translateY(15px); */
+  }
+  
+  .prd-card .card:hover .content .details
+  {
+    transform: translateY(0px);
+    
+  }
+  
+  .prd-card .card .content .details h2
+  {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #555;
+    line-height: 1.2rem;
+  }
+  
+  .prd-card .card .content .details h2 span
+  {
+    font-size: 0.75rem;
+    font-weight: 500;
+    opacity: 0.5;
+  }
+  
+  .prd-card .card .content .details .data
+  {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+  }
+  
+  .prd-card .card .content .details .data h3
+  {
+    font-size: 1em;
+    color: #555;
+    line-height: 1.2em;
+    font-weight: 600;
+  }
+  
+  .prd-card .card .content .details .data h3 span
+  {
+    font-size: 0.85rem;
+    font-weight: 400;
+    opacity: 0.5;
+  }
+  
+  .prd-card .card .content .details .actionBtn
+  {
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
+    
+  }
+  
+  .prd-card .card .content .details .actionBtn button
+  {
+    padding: 6px 20px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    font-weight: 500;
+    background: #0d8c60;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .prd-card .card .content .details .actionBtn button:nth-child(2)
+  {
+    border: 1px solid #999;
+    background: #999;
+  }
+
+  @media(max-width:1399px) and (min-width:1200px) {
+
+    .prd-card .imgBx {
+      width: 100px;
+      height: 100px;
+    }
+
+    .prd-card .card {
+      position: relative;
+      width: 230px;
+      height: 170px;
+
+    }
+    .prd-card .card .content .details h2 {
+      font-size: 1.1rem;
+    }
+
+    .prd-card .card .content .details .actionBtn {
+      margin-top: 15px;
+    }
+
   }

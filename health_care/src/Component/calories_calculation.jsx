@@ -327,7 +327,7 @@ const CalorieCalculator = () => {
                             </div>
 
                         </div>
-                        <div className="row d-flex pt-3 justify-content-center">
+                        <div className="row d-flex pt-3 justify-content-center calories_total">
                             {bmi &&
                                 <>
                                     {/* <div className="total-box calories " id='completion-status'>
@@ -343,16 +343,12 @@ const CalorieCalculator = () => {
                                         <div className="result-header">
                                             <h6>BMI:{bmi}</h6>
                                         </div>
-                                        <div className="score-box">
-                                            
-                                            <div className="score">
-                                                <img src={weight_icon} alt="" className='icon' />
+                                        
+                                                <img src={weight_icon} alt="" />
                                                 <h6> ({bmiCategory})</h6>
                                             </div>
 
-                                        </div>
-
-                                    </div>
+                                        
 
                                 </>
 
@@ -360,14 +356,14 @@ const CalorieCalculator = () => {
                             {calories &&
                                 <>
                                     {/* <div className="col-md-3"> */}
-                                    <div className="result-inner-box text-center total-box calories" style={{justifyContent:"space-around"}}>
+                                    <div className="result-inner-box text-center total-box calories">
                                         <div className="result-header">
                                             <h6>Current Calories </h6>
                                         </div>
                                         <img src={calories_icon} alt="" />
-                                        <div className="result-text">
+                                        
                                             <h6>Your Daily Calorie Requirement:{calories} kcal</h6>
-                                        </div>
+                                        
 
 
                                     </div>
@@ -382,9 +378,9 @@ const CalorieCalculator = () => {
                                             <h6>Ideal Weight (Kg)</h6>
                                         </div>
                                         <img src={ideal_weight} alt="" />
-                                        <div className="result-text">
+                                        
                                             <h6>Your Ideal Weight: {idealWeight} kg</h6>
-                                        </div>
+                                        
 
                                     </div>
                                     {/* </div> */}
@@ -398,9 +394,9 @@ const CalorieCalculator = () => {
                                             <h6>Calories for ideal weight</h6>
                                         </div>
                                         <img src={suggested_calories} alt="" />
-                                        <div className="result-text">
+                                       
                                             <h6>Calories for Ideal Weight: {caloriesForIdealWeight} kcal</h6>
-                                        </div>
+                                        
 
                                     </div>
                                     {/* </div> */}
@@ -414,9 +410,9 @@ const CalorieCalculator = () => {
                                             <h6>Calories Adjustment</h6>
                                         </div>
                                         <img src={reduce_cal} alt="" />
-                                        <div className="result-text">
+                                        
                                             <h6>{caloriesAdjustment}</h6>
-                                        </div>
+                                        
 
                                     </div>
                                     {/* </div> */}

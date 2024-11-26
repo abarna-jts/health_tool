@@ -387,11 +387,14 @@ function Diabetes() {
                                 </div>
 
                             ))}
-                            <div id="completion-status" className={`completion-status text-justify mt-3 total-box mb-3`}>
-                                <h5 style={{ color: "#16192c" }}>Total Points: {calculateTotalPoints()}</h5>
+                            <div id="completion-status" className={`completion-status text-justify mt-3 total-box mb-3 result-inner-box`}>
+                                <div className="result-header text-center">
+                                    <h5 style={{ color: "#fff" }}>Total Points: {calculateTotalPoints()}</h5>
+                                </div>
+                                
                                 {calculateTotalPoints() >= 5 && (
                                     <>
-                                        <h6>If you scored 5 or higher</h6>
+                                        <h6 style={{padding:"5px"}}>If you scored 5 or higher</h6>
                                         <p>You are at increased risk for having prediabetes and are at high risk for type 2 diabetes However, only your
                                             doctor can tell for sure if you have type 2 diabetes or prediabetes, a condition in which blood sugar
                                             levels are higher than normal but not high enough yet to be diagnosed as type 2 diabetes.</p>
@@ -400,13 +403,13 @@ function Diabetes() {
                                 )}
                                 {calculateTotalPoints() > 0 && calculateTotalPoints() < 5 && (
                                     <>
-                                        <h6>If you scored 4 or less</h6>
+                                        <h6 style={{padding:"5px"}}>If you scored 4 or less</h6>
                                         <p>You are not at risk of getting prediabetes Stay healthy and active to lower your risk of developing any diseases.</p>
                                     </>
                                 )}
                                 {calculateTotalPoints() === 0 && (
                                     <>
-                                        <p>Answer all the question</p>
+                                        <p style={{padding:"5px",marginBottom:"0rem"}}>Answer all the question</p>
                                     </>
                                 )}
                                 <div className="social-container" style={{ marginTop: '20px' }}>

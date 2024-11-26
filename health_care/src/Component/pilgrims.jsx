@@ -243,7 +243,8 @@ function Pilgrims() {
                             </div>
 
                             {/* Completion Status */}
-                            <div ref={completionStatusRef} className="result-inner-box text-center completion-status text-justify mt-3 total-box mb-3">
+                            {lastQuestionAnswered &&(
+                                <div ref={completionStatusRef} className="result-inner-box text-center completion-status text-justify mt-3 total-box mb-3">
                                 <div className="result-header">
                                     <p>Ready By: {completionPercentage}%</p>
                                 </div>
@@ -271,6 +272,8 @@ function Pilgrims() {
                                     </ul>
                                 </div>
                             </div>
+                            )}
+                            
 
                         </div>
                     </div>

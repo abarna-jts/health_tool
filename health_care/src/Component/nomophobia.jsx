@@ -182,9 +182,12 @@ function Nomophobia(){
                             {/* Display the total box only after all questions are answered */}
                             {allQuestionsAnswered && (
                             <>
-                                <div id="completion-status" className={`completion-status text-justify mt-3 total-box`}>
-                                <h5 style={{ color: "#16192c" }}>Total Score: {totalScore_nomophobia}</h5>
-                                <ul>
+                                <div id="completion-status" className={`completion-status text-justify mt-3 total-box result-inner-box`}>
+                                <div className="result-header text-center">
+                                    <h5 style={{ color: "#fff" }}>Total Score: {totalScore_nomophobia}</h5>
+                                </div>
+                               
+                                <ul style={{padding:"5px"}}>
                                     {totalScore_nomophobia >= 100 && (
                                         <>
                                             <h6>Severe ,You have a pathological fear of living without using the mobile phone (see your doctor)</h6>

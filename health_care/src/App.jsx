@@ -21,6 +21,7 @@ import Contact_us from './Component/contact_us';
 import Sidebar from './Component/sidebar';
 import Sample from './Component/sample';
 import Heart_rate from './Component/heart_rate';
+import Health_tool_card from './Component/health_tool_card';
 
 
 // import Carousel_nav from './Component/carousel';
@@ -51,7 +52,7 @@ function App() {
           <Route path="/Health_tool" element={<Health_tool />} />
           <Route path="/about_us" element={<About_us />} />
           <Route path="/contact_us" element={<Contact_us />} />
-          <Route path="/sample" element={<Sample />} />
+          <Route path="/health_tool_card" element={<Health_tool_card />} />
           {/* Other routes */}
         </Routes>
         {/* <Carousel_nav /> */}

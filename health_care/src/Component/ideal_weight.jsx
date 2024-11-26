@@ -131,8 +131,11 @@ function IdealBodyWeight() {
                             </div>
 
                             {ibw && (
-                                <div className="result mt-4 text-center">
-                                    <h4>Your Ideal Body Weight: {ibw} kg</h4>
+                                <div className="result mt-4 text-center result-inner-box">
+                                    <div className="result-header">
+                                        <h4>Your Ideal Body Weight: {ibw} kg</h4>
+                                    </div>
+                                    
                                     <div className="social-container" style={{ marginTop: '20px' }}>
                                     <h5><strong>Share your Score</strong></h5>
                                         <ul className="social-icons" style={{ display: 'flex', listStyle: 'none', padding: 0, justifyContent: "center", alignItems: "center" }}>

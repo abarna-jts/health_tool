@@ -66,7 +66,7 @@ function Sidebar() {
                     <li>
                         <NavLink to="/pilgrims"  className={({ isActive }) => (isActive ? 'active-link' : '')}>
                             {({ isActive }) => (<>
-                                <img src={isActive ? asthumaActive : pilgrims} alt="" className="icon-image"/>Checklist Of Pilgrims’ Health Preparations
+                                <img src={isActive ? asthumaActive : pilgrims} alt="" className="icon-image"/>Checklist Of Pilgrims Health Preparations
                             </>)}
                         </NavLink>
                     </li>

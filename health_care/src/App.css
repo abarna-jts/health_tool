@@ -234,7 +234,7 @@
    flex-wrap: wrap;
  }
 
- .card {
+ .card-list .card {
    border: 2px solid #457d9966 !important;
  }
 
@@ -739,12 +739,23 @@
  }
 
  .title-card {
-   background-color: #457d99;
-   color: #fff;
-   padding: 10px;
-   margin: 15px 0px;
-   border-radius: 5px;
+       background-color: transparent;
+       color: #457d99;
+       padding: 10px;
+       margin: 10px 0px 10px 0px;
+       border-radius: 5px;
+        /* this is the magic! */
+  
  }
+
+ .title-card:after {
+  display: inline-block;
+  content: "";
+  margin-top: 0;
+  width: 50%;
+  height: 0.05lh;
+  background-color: #457d99;
+}
 
  /* Heart Rate Test Style Start */
 
@@ -1033,11 +1044,38 @@
    }
 
    .calories {
-     width: 135px !important;
-     height: auto;
-     margin: 10px;
+    width: 145px !important;
+    height: 145px;
+    margin: 5px;
+    padding: 5px;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
    }
-
+   .calories h6{
+    font-size: 13px;
+   }
+   .result-inner-box {
+    justify-content: space-between;
+    
+}
+   .calories .result-header {
+    padding: 5px;
+   }
+   .calories img{
+    width: 52px;
+    height: 52px;
+    padding: 5px;
+   }
+   .calories_total{
+    display: block;
+   }
+   .calories .h6 {
+    font-size: 13px;
+}
+   .calories .result-header h6 {
+    font-size: 13px;
+    margin-bottom: 0rem;
+}
    .result-text h6 {
      font-size: 0.8rem;
    }
